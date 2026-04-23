@@ -6,6 +6,8 @@
             --text-muted: #8E8E8E;    /* 次要文字 */
             --accent: #D4AF37;        /* 金色 (獲獎標籤點綴) */
             --transition: all 0.3s ease;
+            /* 強制設定為 Noto Serif TC */
+            --font-serif: 'Noto Serif TC', serif;
         }
 
         body, h1, h2, p {
@@ -14,7 +16,7 @@
         }
 
         body {
-            font-family: 'Noto Sans TC', sans-serif;
+font-family: var(--font-serif);
             background-color: #FFFFFF;
             color: var(--primary-dark);
             line-height: 1.6;
