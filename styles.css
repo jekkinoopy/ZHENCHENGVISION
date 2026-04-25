@@ -27,7 +27,7 @@ font-family: var(--font-serif);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 5%;
+            padding: 0 5%;
             background: white;
             border-bottom: 1px solid #eee;
             position: sticky;
@@ -37,7 +37,7 @@ font-family: var(--font-serif);
 
         .logo img {
             color: var(--primary-dark);
-            width: 300px;
+            width: 200px;
 
         }
 
@@ -74,9 +74,9 @@ font-family: var(--font-serif);
         
         /* 3. 英雄看板區 (Hero Section) */
         .hero {
-            height: 80vh;
+            height: 90vh;
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-                        url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80'); /* 暫代圖：壯闊山景 */
+                        url('images/header.jpg');
             background-size: cover;
             background-position: center;
             display: flex;
