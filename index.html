@@ -30,9 +30,11 @@
     </nav>
 
     <header class="hero">
-        <h1>珍成視界</h1>
-        <p>ZHEN CHENG VISION</p>
-        <a href="#collections" class="cta-btn">探索攝影精粹</a>
+        <div class="hero-content">
+            <h1>珍成視界</h1>
+            <p>羽翼間的靈動瞬間</p> <!-- 強化主題 -->
+            <a href="#collections" class="cta-btn">進入鳥類圖鑑</a> <!-- 明確目標 -->
+        </div>
     </header>
     <section id="collections">
         <div class="section-title">
@@ -42,7 +44,7 @@
         <div class="grid-container">
             <!-- 核心：鳥類圖鑑 (建議 CSS 給它 grid-column: span 2 或單獨置頂) -->
             <div class="category-item featured">
-                <img src="images/category3.JPG" alt="鳥類圖鑑">
+                <img src="images/bird20100814綠世界20100814_0134.jpeg" alt="鳥類圖鑑">
                 <div class="category-label">
                     <h3>鳥類圖鑑 Bird Gallery</h3>
                     <p>收錄台灣特有種與候鳥生態影像</p> <!-- 增加敘述 -->
@@ -51,14 +53,14 @@
 
             <!-- 其他次要分類 -->
             <div class="category-item">
-                <img src="images/category3.JPG" alt="風景">
+                <img src="images/category1.JPG" alt="風景">
                 <div class="category-label">
                     <h3>壯麗風景</h3>
                 </div>
             </div>
 
             <div class="category-item">
-                <img src="images/category3.JPG" alt="人文">
+                <img src="images/category2.jpg" alt="人文">
                 <div class="category-label">
                     <h3>人文紀錄</h3>
                 </div>
@@ -92,10 +94,22 @@
     </section> -->
 
     <footer>
-        <div class="footer-logo">ZHEN CHENG VISION</div>
-        <p>捕捉真實瞬間，定格永恆價值。</p>
-        <div class="copyright">
-            &copy; 2026 珍成視界. 版權所有。由林麗珍、柯志成攝影師授權。
+        <div class="footer-content">
+            <!-- 1. 網站主人 (最顯眼) -->
+            <div class="footer-logo">ZHEN CHENG VISION</div>
+            <p class="slogan">捕捉真實瞬間，定格永恆價值。</p>
+
+            <hr class="footer-divider"> <!-- 增加一條細線做出視覺分割 -->
+
+            <!-- 2. 設計師與版權 (附屬資訊) -->
+            <div class="footer-bottom">
+                <a href="https://jekkinoopy.github.io/Portfolio/" class="studio-link" target="_blank">
+                    Design by <strong>Jekkinoopy Studio</strong>
+                </a>
+                <div class="copyright">
+                    &copy; 2026 珍成視界. 版權所有。
+                </div>
+            </div>
         </div>
     </footer>
 

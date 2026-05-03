@@ -22,7 +22,6 @@
 
        /* 1. 解決貼邊：幫主要內容區加上最大寬度並居中 */
        #collections,
-       footer,
        nav .nav-content {
            max-width: 1000px;
            /* 或者你喜歡的寬度，如 1400px */
@@ -105,7 +104,7 @@
        .hero {
            height: 90vh;
            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-               url('images/header.jpg');
+               url('images/bird20100814綠世界20100814_0119.jpeg');
            background-size: cover;
            background-position: center;
            display: flex;
@@ -122,6 +121,8 @@
            margin-bottom: 10px;
            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
        }
+
+
 
        .hero p {
            font-size: 1.2rem;
@@ -236,6 +237,17 @@
            transition: transform 0.4s ease;
        }
 
+       /* 套用到 Hero 的標題或卡片標題上 */
+       .hero-content h1,
+       .category-label h3 {
+           color: #ffffff;
+           /* 白字 */
+           text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5),
+               /* 柔和的大陰影 */
+               0 1px 2px rgba(0, 0, 0, 0.8);
+           /* 銳利的深色邊緣 */
+       }
+
        /* 滑鼠滑過時的動態效果 */
        .category-item:hover img {
            transform: scale(1.05);
@@ -251,25 +263,48 @@
        }
 
        /* 5. 頁尾 (Footer) */
+       /* 修正 Footer 過重與貼邊問題 */
        footer {
-           background: var(--primary-dark);
-           width: 100%;
-           margin-top: auto;
-           color: #888;
-           padding: 40px 0;
+           background-color: #1a1a1a;
+           /* 深灰比純黑高級 */
+           color: #f4f4f4;
+           padding: 60px 0;
+           /* 增加上下空間 */
            text-align: center;
+           margin-top: 80px;
+           /* 與上方專題保持距離 */
        }
 
-       .footer-logo {
-           color: white;
-           font-size: 1.2rem;
-           letter-spacing: 3px;
-           margin-bottom: 20px;
+       .footer-content {
+           max-width: 1200px;
+           /* 限制寬度，不貼邊 */
+           margin: 0 auto;
+       }
+
+       /* 讓 Footer 內部更有層次 */
+       .footer-divider {
+           border: 0;
+           border-top: 1px solid rgba(255, 255, 255, 0.1);
+           margin: 30px 0;
+       }
+
+       /* 縮小你的連結，讓它看起來像浮水印 */
+       .studio-link {
+           display: block;
+           font-size: 0.75rem;
+           /* 縮小字體 */
+           color: rgba(255, 255, 255, 0.4);
+           /* 降低透明度 */
+           text-decoration: none;
+           margin-bottom: 5px;
+           transition: 0.3s;
+       }
+
+       .studio-link:hover {
+           color: rgba(255, 255, 255, 0.8);
        }
 
        .copyright {
-           font-size: 0.8rem;
-           margin-top: 40px;
-           border-top: 1px solid #333;
-           padding-top: 20px;
+           font-size: 0.75rem;
+           opacity: 0.4;
        }
