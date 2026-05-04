@@ -103,8 +103,9 @@
        /* 3. 英雄看板區 (Hero Section) */
        .hero {
            height: 90vh;
-           background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-               url('images/bird20100814綠世界20100814_0119.jpeg');
+           background:
+               linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)),
+               url('images/bird/五色鳥002.jpg');
            background-size: cover;
            background-position: center;
            display: flex;
