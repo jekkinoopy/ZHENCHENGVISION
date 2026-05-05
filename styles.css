@@ -8,8 +8,8 @@
            /* 主要文字 */
            --text-muted: #8E8E8E;
            /* 次要文字 */
-           --accent: #D4AF37;
-           /* 金色 (獲獎標籤點綴) */
+           --accent: #205072;
+
            --transition: all 0.3s ease;
            /* 強制設定為 Noto Serif TC */
            --font-serif: 'Noto Serif TC', serif;
@@ -105,7 +105,7 @@
            height: 90vh;
            background:
                linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)),
-               url('images/bird/五色鳥002.jpg');
+               url('images/bird/LINE_ALBUM_網頁圖片_260504_1.jpg');
            background-size: cover;
            background-position: center;
            display: flex;
