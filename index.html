@@ -4,54 +4,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>視界成珍 ZHEN CHENG VISION | 專業攝影圖庫</title>
-    <meta name="description" content="視界成珍由獲獎攝影師林麗珍（珍幸福）與柯志成(Koman)創立，提供高品質專業攝影素材下載。集結數十年光影精華，捕捉自然與人文的真摯瞬間。">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>鳥類分頁 | ZHEN CHENG VISION</title>
+    <meta name="description" content="鳥類攝影分頁，收錄林地、濕地與城市棲地中的鳥類影像。">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <script src="nav-loader.js"></script>
-    <nav>
-        <div class="logo"><img src="images/ZHENCHENGVISION.svg" alt="視界成珍 Logo"></div>
-        <ul>
-            <li><a href="#">首頁</a></li>
-            <li><a href="#">素材分類</a></li>
-            <li><a href="#">關於我們</a></li>
-            <li><a href="#">獲獎紀錄</a></li>
-            <!-- <li><a href="#">定價方案</a></li> -->
+    <main class="page-frame">
+        <header class="top-nav">
+            <div class="brand">ZHEN CHENG VISION</div>
+            <nav>
+                <ul>
+                    <li><a href="#">首頁</a></li>
+                    <li><a href="#">鳥類</a></li>
+                    <li><a href="#">生態故事</a></li>
+                    <li><a href="#">聯絡</a></li>
+                </ul>
+            </nav>
+        </header>
 
-        </ul>
-        <!-- <div class="nav-icons">
-            <a href="#"><i class="fa-solid fa-cart-shopping"></i> <span id="cart-count">0</span></a>
-            <a href="#"><i class="fa-solid fa-user"></i></a>
-        </div> -->
-    </nav>
+        <section class="gallery-heading">
+            <span class="line"></span>
+            <h1>Bird Gallery</h1>
+            <span class="line"></span>
+        </section>
 
-    <header class="hero">
-        <div class="hero-content">
-            <h1>視界成珍</h1>
-            <p>羽翼間的靈動瞬間</p> <!-- 強化主題 -->
-            <a href="#collections" class="cta-btn">進入鳥類圖鑑</a> <!-- 明確目標 -->
-        </div>
-    </header>
-    <section id="collections">
+        <section class="tab-switch" aria-label="鳥類內容分頁">
+            <button class="tab-btn active" type="button" data-tab="species">鳥類分類</button>
+            <button class="tab-btn" type="button" data-tab="photos">照片</button>
+        </section>
+
+        <section id="species" class="tab-panel active" aria-label="鳥類分類">
+            <div id="speciesGrid" class="species-grid"></div>
+        </section>
+
+        <section id="photos" class="tab-panel" aria-label="鳥類拼貼畫廊">
+            <div id="photoGrid" class="gallery-grid"></div>
+        </section>
+
+        <section class="note">
+            <p>在晨光與暮色之間，記錄每一片羽翼的姿態。</p>
+            <p class="sub">FOLLOW ALONG @ZHENCHENGVISION</p>
+        </section>
+
+        <section id="thumbStrip" class="thumb-strip" aria-label="鳥類縮圖列"></section>
+
+        <footer class="page-footer">
+            <div class="footer-links">
+                <a href="#">FAQ</a>
+                <a href="#">聯絡</a>
+                <a href="#">條款</a>
+                <a href="#">更多頁面</a>
+            </div>
+            <p class="copyright">&copy; 2026 ZHEN CHENG VISION. All rights reserved.</p>
+        </footer>
+    </main>
+
+    <div class="bottom-sign">ZHENCHENGVISION.COM</div>
+    <script>
+        function parseBirdFile(fileName) {
+            const cleanName = fileName.replace(/\.[^/.]+$/, "");
+
+            // 支援格式 1: 鳥名$$$照片名稱.jpg
+            if (cleanName.includes("$$$")) {
+                const parts = cleanName.split("$$$");
+                const species = (parts[0] || "未分類").trim();
+                const photoTitle = (parts[1] || parts[0] || "未命名照片").trim();
+                return { species, photoTitle, fileName };
+            }
+
+            // 支援格式 2: 鳥名001.jpg / 鳥名_01.jpg
+            const matched = cleanName.match(/^(.*?)[_\-\s]?(\d{1,4})$/);
+            if (matched) {
+                const species = (matched[1] || "未分類").trim();
+                const photoTitle = `照片 ${matched[2]}`;
+                return { species, photoTitle, fileName };
+            }
+
+            // 其他格式：整段視為鳥名
+            const species = cleanName.trim() || "未分類";
+            const photoTitle = "未命名照片";
+            return { species, photoTitle, fileName };
+        }
+
+        function renderSpecies(records) {
+            const speciesGrid = document.getElementById("speciesGrid");
+            if (!records.length) {
+                speciesGrid.innerHTML = '<p class="empty-msg">尚未載入圖片檔名，請把檔名加入 birdFiles。</p>';
+                return;
+            }
+
+            const map = new Map();
+            records.forEach((item) => {
+                if (!map.has(item.species)) map.set(item.species, []);
+                map.get(item.species).push(item);
+            });
+
+            speciesGrid.innerHTML = Array.from(map.entries())
+                .map(([species, photos]) => {
+                    const cover = photos[0];
+                    return `
+                        <article class="species-card">
+                            <img src="images/bird/${cover.fileName}" alt="${species}">
+                            <div class="species-meta">
+                                <h3>${species}</h3>
+                                <p>共 ${photos.length} 張照片</p>
+                            </div>
+                        </article>
+                    `;
+                })
+                .join("");
+        }
+
+        function renderPhotos(records) {
+            const photoGrid = document.getElementById("photoGrid");
+            if (!records.length) {
+                photoGrid.innerHTML = '<p class="empty-msg">尚未載入照片資料。</p>';
+                return;
+            }
+
+            photoGrid.innerHTML = records
+                .map((item, index) => {
+                    const tileClass = `tile tile-${(index % 7) + 1}`;
+                    return `
+                        <article class="${tileClass}">
+                            <img src="images/bird/${item.fileName}" alt="${item.species} - ${item.photoTitle}">
+                        </article>
+                    `;
+                })
+                .join("");
+        }
+
+        function renderThumbs(records) {
+            const thumbStrip = document.getElementById("thumbStrip");
+            if (!records.length) {
+                thumbStrip.innerHTML = "";
+                return;
+            }
+
+            thumbStrip.innerHTML = records.slice(0, 6)
+                .map((item) => `<img src="images/bird/${item.fileName}" alt="${item.species} - ${item.photoTitle}">`)
+                .join("");
+        }
+
+        async function bootstrapGallery() {
+            try {
+                const response = await fetch("./bird-manifest.json", { cache: "no-store" });
+                if (!response.ok) throw new Error("manifest read failed");
+
+                const birdFiles = await response.json();
+                const records = birdFiles.map(parseBirdFile);
+
+                renderSpecies(records);
+                renderPhotos(records);
+                renderThumbs(records);
+            } catch (error) {
+                const failMsg = '<p class="empty-msg">無法讀取 bird-manifest.json，請確認檔案存在且可存取。</p>';
+                document.getElementById("speciesGrid").innerHTML = failMsg;
+                document.getElementById("photoGrid").innerHTML = failMsg;
+                document.getElementById("thumbStrip").innerHTML = "";
+            }
+        }
+
+        bootstrapGallery();
+
+        const tabButtons = document.querySelectorAll(".tab-btn");
+        const tabPanels = document.querySelectorAll(".tab-panel");
+
+        tabButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const target = button.dataset.tab;
+
+                tabButtons.forEach((btn) => btn.classList.remove("active"));
+                tabPanels.forEach((panel) => panel.classList.remove("active"));
+
+                button.classList.add("active");
+                document.getElementById(target).classList.add("active");
+            });
+        });
+    </script>
+
+    <!-- <section id="collections">
         <div class="section-title">
-            <h2>精選專題</h2> <!-- 改成更有權威感的標題 -->
+            <h2>精選專題</h2>
         </div>
 
         <div class="grid-container">
-            <!-- 核心：鳥類圖鑑 (建議 CSS 給它 grid-column: span 2 或單獨置頂) -->
             <div class="category-item featured">
                 <img src="images/bird/五色鳥001.jpg" alt="鳥類圖鑑">
                 <div class="category-label">
                     <h3>鳥類圖鑑 Bird Gallery</h3>
-                    <p>收錄台灣特有種與候鳥生態影像</p> <!-- 增加敘述 -->
+                    <p>收錄台灣特有種與候鳥生態影像</p>
                 </div>
             </div>
 
-            <!-- 其他次要分類 -->
             <div class="category-item">
                 <img src="images/category1.JPG" alt="風景">
                 <div class="category-label">
@@ -63,56 +210,10 @@
                 <img src="images/category2.jpg" alt="人文">
                 <div class="category-label">
                     <h3>人文紀錄</h3>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- <section id="collections">
-        <div class="section-title">
-            <h2>作品分類</h2>
-        </div>
-        <div class="grid-container">
-            <div class="category-item">
-                <img src="images/category1.JPG" alt="風景">
-                <div class="category-label">
-                    <h3>壯麗風景</h3>
-                </div>
-            </div>
-            <div class="category-item">
-                <img src="images/category2.jpg" alt="人文">
-                <div class="category-label">
-                    <h3>人文紀錄</h3>
-                </div>
-            </div>
-            <div class="category-item">
-                <img src="images/category3.JPG" alt="自然">
-                <div class="category-label">
-                    <h3>生命律動</h3>
                 </div>
             </div>
         </div>
     </section> -->
-
-    <footer>
-        <div class="footer-content">
-            <!-- 1. 網站主人 (最顯眼) -->
-            <div class="footer-logo">ZHEN CHENG VISION</div>
-            <p class="slogan">捕捉真實瞬間，定格永恆價值。</p>
-
-            <hr class="footer-divider"> <!-- 增加一條細線做出視覺分割 -->
-
-            <!-- 2. 設計師與版權 (附屬資訊) -->
-            <div class="footer-bottom">
-                <a href="https://jekkinoopy.github.io/Portfolio/" class="studio-link" target="_blank">
-                    Design by <strong>Jekkinoopy Studio</strong>
-                </a>
-                <div class="copyright">
-                    &copy; 2026 視界成珍. 版權所有。
-                </div>
-            </div>
-        </div>
-    </footer>
-
 </body>
 
 </html>
