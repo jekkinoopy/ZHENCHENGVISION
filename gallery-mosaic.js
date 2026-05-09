@@ -194,9 +194,14 @@
 
         }
 
+        /* 滿版馬賽克 7 格：第 3 格（左側高欄）優先直式，其餘格偏好橫式，較符合構圖也減少過度裁切 */
+        const main = Array.from({ length: mainCount }, (_, i) =>
+            mainCount === 7 && i === 2 ? pickPortraitFirst() : pickLandscapeFirst()
+        );
+
         return {
 
-            main: Array.from({ length: mainCount }, () => pickLandscapeFirst()),
+            main,
 
             fourth: Array.from({ length: fourthCount }, (_, i) => (i === 1 ? pickLandscapeFirst() : pickPortraitFirst())),
 
@@ -311,13 +316,17 @@
 
     function fillMix1h1v(mount, folderName, landItem, portraitItem) {
 
-        const frameL = mount.querySelector(".layout-mix--1h1v .layout-gallery-cover-frame");
+        const root = mount.querySelector(".layout-mix--1h1v");
 
-        const sP = mount.querySelector(".layout-mix--1h1v .layout-mix-portrait");
+        if (!root) return;
+
+        const sL = root.querySelector(".layout-mix-landscape");
+
+        const sP = root.querySelector(".layout-mix-portrait");
 
         const tag = (item) => `<img src="images/${folderName}/${item.fileName}" alt="${escapeAlt(labelFor(item))}">`;
 
-        if (frameL && landItem) frameL.innerHTML = tag(landItem);
+        if (sL && landItem) sL.innerHTML = tag(landItem);
 
         if (sP && portraitItem) sP.innerHTML = tag(portraitItem);
 

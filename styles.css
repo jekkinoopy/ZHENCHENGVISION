@@ -458,21 +458,69 @@
            max-width: 100%;
        }
 
-       .about-lead-photo-frame {
+       /* 手機：單張顯示；桌機交由 .about-lead-duo（見文末 media） */
+       .about-lead-photo--mobile-full {
            border-radius: var(--gallery-card-radius, 8px);
            overflow: hidden;
            box-shadow: 0 16px 52px rgba(26, 26, 26, 0.1);
-           aspect-ratio: 16 / 9;
            background: var(--bg-light);
            line-height: 0;
        }
 
-       .about-lead-photo-frame img {
+       .about-lead-photo--mobile-full img {
            width: 100%;
-           height: 100%;
-           object-fit: cover;
-           object-position: center 28%;
+           height: auto;
            display: block;
+       }
+
+       /* 桌機並排裁切同一張合成圖：L/R 為視覺寬度比（橫圖側通常略大，可調整） */
+       .about-lead-duo {
+           --about-duo-L: 1.28;
+           --about-duo-R: 1;
+           display: none;
+           align-items: flex-start;
+           border-radius: var(--gallery-card-radius, 8px);
+           overflow: hidden;
+           box-shadow: 0 16px 52px rgba(26, 26, 26, 0.1);
+           background: var(--bg-light);
+           line-height: 0;
+       }
+
+       .about-lead-duo-slice {
+           flex: var(--about-duo-L);
+           min-width: 0;
+           overflow: hidden;
+           background: var(--bg-light);
+       }
+
+       .about-lead-duo-slice--right {
+           flex: var(--about-duo-R);
+       }
+
+       /* 將完整寬度的圖各放大到 (L+R)/欄占比，再以 translate 露出對應半幅 */
+       .about-lead-duo-slice--left img {
+           width: calc(100% * (var(--about-duo-L) + var(--about-duo-R)) / var(--about-duo-L));
+           height: auto;
+           max-width: none;
+           display: block;
+       }
+
+       .about-lead-duo-slice--right img {
+           width: calc(100% * (var(--about-duo-L) + var(--about-duo-R)) / var(--about-duo-R));
+           height: auto;
+           max-width: none;
+           display: block;
+           transform: translateX(calc(-100% * var(--about-duo-L) / (var(--about-duo-L) + var(--about-duo-R))));
+       }
+
+       @media (min-width: 561px) {
+           .about-lead-photo--mobile-full {
+               display: none;
+           }
+
+           .about-lead-duo {
+               display: flex;
+           }
        }
 
        .about-photo-caption {

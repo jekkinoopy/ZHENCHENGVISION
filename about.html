@@ -49,7 +49,7 @@
                 "primaryImageOfPage": {
                     "@type": "ImageObject",
                     "url": "images/about.jpg",
-                    "caption": "視界成珍創作者／雙視角紀實攝影工作室形象"
+                    "caption": "普通翠鳥生態攝影雙視角拼圖｜視界成珍工作室形象"
                 }
             }
         ]
@@ -92,12 +92,23 @@
                         <span class="about-heading-line" aria-hidden="true"></span>
                     </div>
                     <figure class="about-lead-photo">
-                        <div class="about-lead-photo-frame">
+                        <!-- 窄螢幕：單檔全貌（避免並排裁切過細） -->
+                        <div class="about-lead-photo-frame about-lead-photo--mobile-full">
                             <img src="images/about.jpg"
-                                alt="視界成珍創作者／攝影工作室形象照：珍幸福與 Koman 自然與生態雙創作路線"
-                                title="視界成珍工作室形象"
+                                alt="普通翠鳥生態攝影雙視角拼圖：蓮苞、花莖與覓食瞬間｜視界成珍（珍幸福 × Koman）工作室形象"
+                                title="視界成珍工作室形象——翠鳥生態紀實"
                                 decoding="async"
                                 fetchpriority="high">
+                        </div>
+                        <!-- 寬螢幕：同一檔拆成左右欄並頂對齊，不依賴「合成底圖留白」的假高度 -->
+                        <div class="about-lead-duo" role="group"
+                            aria-label="普通翠鳥生態攝影雙視角拼圖：蓮苞、花莖與覓食瞬間｜視界成珍工作室形象">
+                            <div class="about-lead-duo-slice about-lead-duo-slice--left">
+                                <img src="images/about.jpg" alt="" decoding="async" fetchpriority="high">
+                            </div>
+                            <div class="about-lead-duo-slice about-lead-duo-slice--right">
+                                <img src="images/about.jpg" alt="" decoding="async">
+                            </div>
                         </div>
                         <figcaption class="about-photo-caption">珍幸福 × Koman・視界成珍 ZHEN CHENG VISION</figcaption>
                     </figure>
