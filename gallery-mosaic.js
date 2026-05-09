@@ -326,9 +326,9 @@
 
         const tag = (item) => `<img src="images/${folderName}/${item.fileName}" alt="${escapeAlt(labelFor(item))}">`;
 
-        if (sL && landItem) sL.innerHTML = tag(landItem);
-
         if (sP && portraitItem) sP.innerHTML = tag(portraitItem);
+
+        if (sL && landItem) sL.innerHTML = tag(landItem);
 
     }
 
@@ -448,39 +448,43 @@
 
     function syncSecondRowSizing(scope) {
 
-        const grid = scope.querySelector(".mosaic-grid");
+        if (!scope || !scope.querySelectorAll) return;
 
-        const s3 = grid?.querySelector(".slot-3");
+        scope.querySelectorAll(".mosaic-grid").forEach((grid) => {
 
-        const s4 = grid?.querySelector(".slot-4");
+            const s3 = grid.querySelector(".slot-3");
 
-        const s5 = grid?.querySelector(".slot-5");
+            const s4 = grid.querySelector(".slot-4");
 
-        if (!grid || !s3 || !s4 || !s5) return;
+            const s5 = grid.querySelector(".slot-5");
 
-        const gap = parseFloat(getComputedStyle(grid).gap || "14") || 14;
+            if (!s3 || !s4 || !s5) return;
 
-        const w = s4.clientWidth;
+            const gap = parseFloat(getComputedStyle(grid).gap || "14") || 14;
 
-        if (!w || w < 2) {
+            const w = s4.clientWidth;
 
-            s3.style.height = "";
+            if (!w || w < 2) {
 
-            s4.style.height = "";
+                s3.style.height = "";
 
-            s5.style.height = "";
+                s4.style.height = "";
 
-            return;
+                s5.style.height = "";
 
-        }
+                return;
 
-        const h = w * (2 / 3);
+            }
 
-        s4.style.height = `${h}px`;
+            const h = w * (2 / 3);
 
-        s5.style.height = `${h}px`;
+            s4.style.height = `${h}px`;
 
-        s3.style.height = `${h * 2 + gap}px`;
+            s5.style.height = `${h}px`;
+
+            s3.style.height = `${h * 2 + gap}px`;
+
+        });
 
     }
 
@@ -488,23 +492,538 @@
 
     function syncFourthRowSizing(scope) {
 
-        const row = scope.querySelector(".fourth-row");
+        if (!scope || !scope.querySelectorAll) return;
 
-        if (!row) return;
-
-        const gap = parseFloat(getComputedStyle(row).gap || "14") || 14;
-
-        const w = row.clientWidth;
-
-        if (!w || w < 2) {
+        scope.querySelectorAll(".fourth-row").forEach((row) => {
 
             row.style.height = "";
 
-            return;
+        });
+
+    }
+
+
+
+    /* 萬象多段版面：
+     * - 每种 segment id 同頁最多一次
+     * - composeSilhouette 同頁也不得重複：避免「看起來像同一種扁平雙橫／等分格」連續出現
+     * - four-two-two（2×2 等分）不參與多段 composer：單獨 4 張仍走既有 branch，避免整頁像截圖那樣兩排複製感
+     */
+    const SEGMENT_CATALOG = [
+
+        {
+            id: "mix2h1v",
+            capacity: 3,
+            templateId: "galleryLayoutTplMix2h1v",
+            composeSilhouette: "rail-2h-1v",
+        },
+
+        {
+            id: "mosaic-second-row",
+            capacity: 3,
+            templateId: "galleryLayoutTpl3SecondRow",
+            composeSilhouette: "mosaic-row2-three",
+        },
+
+        {
+            id: "four-two-two",
+            capacity: 4,
+            templateId: "galleryLayoutTpl4TwoByTwo",
+            composeSilhouette: "grid-2x2-equal",
+            composeExcluded: true,
+        },
+
+        {
+            id: "four-one-three",
+            capacity: 4,
+            templateId: "galleryLayoutTpl4OnePlusThree",
+            composeSilhouette: "hero-1-plus-3",
+        },
+
+        {
+            id: "pair",
+            capacity: 2,
+            templateId: "galleryLayoutTpl2",
+            composeSilhouette: "strip-dual-equal",
+        },
+
+        {
+            id: "mix1h1v",
+            capacity: 2,
+            templateId: "galleryLayoutTplMix1h1v",
+            composeSilhouette: "split-1h-1v",
+        },
+
+        { id: "single", capacity: 1, templateId: "galleryLayoutTpl1", composeSilhouette: "solo-cell" },
+
+    ];
+
+    const SEGMENT_BY_ID = Object.fromEntries(SEGMENT_CATALOG.map((s) => [s.id, s]));
+
+    function composerSegmentIdsInOrder() {
+
+        return SEGMENT_CATALOG.filter((s) => !s.composeExcluded).map((s) => s.id);
+
+    }
+
+    function rotatedSegmentOrder(seedStr) {
+
+        const baseOrder = composerSegmentIdsInOrder();
+
+        if (!baseOrder.length) return [];
+
+        const seed = String(seedStr || "")
+
+            .split("")
+
+            .reduce((a, c) => a + c.charCodeAt(0), 0);
+
+        const rot = seed % baseOrder.length;
+
+        return [...baseOrder.slice(rot), ...baseOrder.slice(0, rot)];
+
+    }
+
+    function dfsComposeUnique(rem, usedIds, usedSilhouettes, tryOrder) {
+
+        if (rem === 0) return [];
+
+        for (let oi = 0; oi < tryOrder.length; oi++) {
+
+            const seg = SEGMENT_BY_ID[tryOrder[oi]];
+
+            if (!seg || usedIds.has(seg.id) || seg.capacity > rem) continue;
+
+            const sil = seg.composeSilhouette;
+
+            if (sil && usedSilhouettes.has(sil)) continue;
+
+            const nextUsed = new Set(usedIds);
+
+            nextUsed.add(seg.id);
+
+            const nextSil = new Set(usedSilhouettes);
+
+            if (sil) nextSil.add(sil);
+
+            const sub = dfsComposeUnique(rem - seg.capacity, nextUsed, nextSil, tryOrder);
+
+            if (sub !== null) return [seg, ...sub];
 
         }
 
-        row.style.height = `${((w - 2 * gap) * 6) / 17}px`;
+        return null;
+
+    }
+
+    function solveUniqueSegmentPlan(total, seedStr) {
+
+        if (total < 1) return null;
+
+        return dfsComposeUnique(total, new Set(), new Set(), rotatedSegmentOrder(seedStr));
+
+    }
+
+    function pullFromPool(pool, taken) {
+
+        const names = new Set(taken.map((t) => (t && t.fileName ? t.fileName : "")));
+
+        const next = pool.filter((r) => !names.has(r.fileName));
+
+        pool.length = 0;
+
+        pool.push(...next);
+
+    }
+
+    function takeSequentialFromPool(pool, n) {
+
+        const k = Math.min(n, pool.length);
+
+        const out = pool.slice(0, k);
+
+        pool.splice(0, k);
+
+        return out;
+
+    }
+
+    function pullPatternFromPool(pool, pattern) {
+
+        const picked = pickPhotosByPattern([...pool], pattern);
+
+        pullFromPool(pool, picked);
+
+        return picked;
+
+    }
+
+    function pullMix2h1vFromPool(pool) {
+
+        const snapshot = pool.slice();
+
+        const landscape = snapshot.filter((r) => r.orientation !== "portrait");
+
+        const portrait = snapshot.filter((r) => r.orientation === "portrait");
+
+        const takenNames = new Set();
+
+        function pullNextFromPreferred(preferredList) {
+
+            for (let i = 0; i < preferredList.length; i++) {
+
+                const want = preferredList[i];
+
+                const k = want && want.fileName ? want.fileName : "";
+
+                if (!k || takenNames.has(k)) continue;
+
+                const idx = pool.findIndex((r) => r.fileName === k);
+
+                if (idx < 0) continue;
+
+                const [one] = pool.splice(idx, 1);
+
+                takenNames.add(k);
+
+                return one;
+
+            }
+
+            return null;
+
+        }
+
+        const p = pullNextFromPreferred(portrait) || pullNextFromPreferred(landscape) || pullNextFromPreferred(snapshot);
+
+        const l1 = pullNextFromPreferred(landscape) || pullNextFromPreferred(snapshot);
+
+        const l2 = pullNextFromPreferred(landscape) || pullNextFromPreferred(snapshot);
+
+        return [p, l1, l2].filter(Boolean);
+
+    }
+
+    function pullMix1h1vFromPool(pool) {
+
+        const landscape = pool.filter((r) => r.orientation !== "portrait");
+
+        const portrait = pool.filter((r) => r.orientation === "portrait");
+
+        let L = landscape[0];
+
+        let P = portrait[0];
+
+        if (!L && pool[0]) L = pool[0];
+
+        if (!P || (L && P.fileName === L.fileName))
+
+            P = portrait.find((r) => !L || r.fileName !== L.fileName) || pool.find((r) => !L || r.fileName !== L.fileName);
+
+        let picked = [];
+
+        if (L && P && L.fileName !== P.fileName) picked = [L, P];
+
+        else picked = pool.slice(0, Math.min(2, pool.length));
+
+        pullFromPool(pool, picked);
+
+        return picked;
+
+    }
+
+    function pullOnePlusThreeFromPool(pool) {
+
+        const chunk = pool.slice(0, Math.min(4, pool.length));
+
+        const picked = pickOnePlusThree(chunk);
+
+        pullFromPool(pool, picked);
+
+        return picked.filter(Boolean);
+
+    }
+
+    function consumeSegmentFromPool(seg, pool, fourModeNormalized) {
+
+        switch (seg.id) {
+
+            case "single":
+
+                return takeSequentialFromPool(pool, 1);
+
+            case "pair":
+
+                return takeSequentialFromPool(pool, seg.capacity);
+
+            case "mix2h1v": {
+
+                let out = pullMix2h1vFromPool(pool);
+
+                while (out.length < seg.capacity && pool.length)
+
+                    out.push(...takeSequentialFromPool(pool, seg.capacity - out.length));
+
+                return out.slice(0, seg.capacity);
+
+            }
+
+            case "mix1h1v": {
+
+                let out = pullMix1h1vFromPool(pool);
+
+                while (out.length < seg.capacity && pool.length)
+
+                    out.push(...takeSequentialFromPool(pool, seg.capacity - out.length));
+
+                return out.slice(0, seg.capacity);
+
+            }
+
+            case "mosaic-second-row":
+
+                return pullPatternFromPool(pool, "LPP").slice(0, seg.capacity);
+
+            case "four-two-two":
+
+                return takeSequentialFromPool(pool, seg.capacity);
+
+            case "four-one-three": {
+
+                if (fourModeNormalized === "onePlusThree") return pullOnePlusThreeFromPool(pool);
+
+                return takeSequentialFromPool(pool, seg.capacity);
+
+            }
+
+            default:
+
+                return takeSequentialFromPool(pool, seg.capacity || 1);
+
+        }
+
+    }
+
+    function fillComposedSegment(seg, wrapper, folderName, items, fourModeNormalized) {
+
+        switch (seg.id) {
+
+            case "single":
+
+            case "pair":
+
+            case "mosaic-second-row":
+
+                fillSlots(wrapper, folderName, items);
+
+                break;
+
+            case "mix2h1v": {
+
+                fillMix2h1v(wrapper, folderName, items[0], items[1], items[2]);
+
+                break;
+
+            }
+
+            case "mix1h1v": {
+
+                const L = items.find((i) => i.orientation !== "portrait") || items[0];
+
+                const P = items.find((i) => i.orientation === "portrait") || items[1];
+
+                fillMix1h1v(wrapper, folderName, L, P);
+
+                break;
+
+            }
+
+            case "four-two-two":
+
+                fillFourTwoByTwo(wrapper, folderName, items);
+
+                break;
+
+            case "four-one-three":
+
+                fillSlots(wrapper, folderName, items);
+
+                break;
+
+            case "flex-blob":
+
+                fillFlexGrid(wrapper, folderName, items);
+
+                break;
+
+            default:
+
+                fillSlots(wrapper, folderName, items);
+
+        }
+
+    }
+
+    function renderComposedLayout(mount, folderName, records, plan, fourModeNormalized) {
+
+        mount.classList.add("gallery-mount--composed");
+
+        mount.classList.add("gallery-mount--compact");
+
+        const pool = records.slice();
+
+        plan.forEach((seg) => {
+
+            const wrapper = document.createElement("section");
+
+            wrapper.className = "gallery-layout-segment";
+
+            wrapper.dataset.segmentId = seg.id;
+
+            const frag = cloneTpl(seg.templateId);
+
+            if (!frag) return;
+
+            while (frag.firstChild) wrapper.appendChild(frag.firstChild);
+
+            mount.appendChild(wrapper);
+
+            const items = consumeSegmentFromPool(seg, pool, fourModeNormalized);
+
+            fillComposedSegment(seg, wrapper, folderName, items, fourModeNormalized);
+
+            runLayoutSync(wrapper);
+
+        });
+
+    }
+
+
+
+    /** 文化影像（gallery-culture）8 張：2v → (2v+1h) → (1v+2v) */
+    function pullPreferPortraitFromPool(pool) {
+
+        const idx = pool.findIndex((r) => r && r.orientation === "portrait");
+
+        if (idx >= 0) return pool.splice(idx, 1)[0];
+
+        return pool.shift();
+
+    }
+
+
+
+    function pullPreferLandscapeFromPool(pool) {
+
+        const idx = pool.findIndex((r) => r && r.orientation !== "portrait");
+
+        if (idx >= 0) return pool.splice(idx, 1)[0];
+
+        return pool.shift();
+
+    }
+
+
+
+    function fillCultureSlots(wrapper, folderName, items) {
+
+        const slots = wrapper.querySelectorAll(".culture-slot");
+
+        items.forEach((item, si) => {
+
+            const slot = slots[si];
+
+            if (!slot || !item) return;
+
+            slot.classList.toggle("slot-photo-portrait", item.orientation === "portrait");
+
+            slot.innerHTML =
+
+                `<img src="images/${folderName}/${item.fileName}" alt="${escapeAlt(labelFor(item))}">`;
+
+        });
+
+    }
+
+
+
+    function renderCultureEightCanonical(mount, folderName, uniqueRecords) {
+
+        mount.classList.add("gallery-mount--composed");
+
+        mount.classList.add("gallery-mount--compact");
+
+        mount.classList.add("layout-culture-eight");
+
+        const pool = uniqueRecords.slice();
+
+        const blueprint = [
+
+            {
+
+                templateId: "galleryCultureTpl2v",
+
+                take: () => [pullPreferPortraitFromPool(pool), pullPreferPortraitFromPool(pool)],
+
+            },
+
+            {
+
+                templateId: "galleryCultureTpl2v1h",
+
+                take: () => [
+
+                    pullPreferPortraitFromPool(pool),
+
+                    pullPreferPortraitFromPool(pool),
+
+                    pullPreferLandscapeFromPool(pool),
+
+                ],
+
+            },
+
+            {
+
+                templateId: "galleryCultureTpl1v2v",
+
+                take: () => [
+
+                    pullPreferPortraitFromPool(pool),
+
+                    pullPreferPortraitFromPool(pool),
+
+                    pullPreferPortraitFromPool(pool),
+
+                ],
+
+            },
+
+        ];
+
+        const labels = ["2v", "2v1h", "1v2v"];
+
+        blueprint.forEach((block, bi) => {
+
+            const wrapper = document.createElement("section");
+
+            wrapper.className = "gallery-layout-segment gallery-layout-segment--culture culture-eight-seg";
+
+            wrapper.dataset.segmentId = labels[bi];
+
+            const frag = cloneTpl(block.templateId);
+
+            if (!frag) return;
+
+            while (frag.firstChild) wrapper.appendChild(frag.firstChild);
+
+            mount.appendChild(wrapper);
+
+            const items = block.take();
+
+            fillCultureSlots(wrapper, folderName, items);
+
+        });
 
     }
 
@@ -528,7 +1047,9 @@
 
             "gallery-mount--fallback",
 
-            "gallery-mount--compact"
+            "gallery-mount--compact",
+
+            "gallery-mount--composed"
 
         );
 
@@ -560,6 +1081,55 @@
 
         const fourMode = normalizeFourLayout(options.fourLayout || mount.dataset.fourLayout);
 
+        /* 文化影像：8 張固定為 2v + (2v+1h) + (1v+2v)，不經過泛用 composer／馬賽克 */
+        if (folderName === "gallery-culture" && unique.length === 8) {
+
+            renderCultureEightCanonical(mount, folderName, unique);
+
+            runLayoutSync(mount);
+
+            return;
+
+        }
+
+        const mosaicThreshold =
+            typeof options.mosaicMin === "number" ? options.mosaicMin : MOSAIC_UNIQUE_MIN;
+
+        const mosaicSliceCap =
+            typeof options.mosaicSliceMax === "number" ? options.mosaicSliceMax : MOSAIC_UNIQUE_MIN;
+
+        const composeUnique = Boolean(options.composeUniqueLayouts);
+
+        const composeMinCount =
+            typeof options.composeMinCount === "number" ? options.composeMinCount : 5;
+
+        const composeMaxCount =
+            typeof options.composeMaxCount === "number" ? options.composeMaxCount : 40;
+
+        if (
+
+            composeUnique &&
+
+            unique.length >= composeMinCount &&
+
+            unique.length <= composeMaxCount
+
+        ) {
+
+            const plan = solveUniqueSegmentPlan(unique.length, folderName);
+
+            if (plan && plan.length) {
+
+                renderComposedLayout(mount, folderName, unique, plan, fourMode);
+
+                runLayoutSync(mount);
+
+                return;
+
+            }
+
+        }
+
 
 
         function applyFullMosaic(sliceRecords) {
@@ -576,9 +1146,49 @@
 
             const slots = mount.querySelectorAll(".mosaic-grid .slot");
 
-            const fourth = mount.querySelectorAll(".fourth-row .slot");
+            const mainSlotCount = slots.length;
 
-            const chosen = chooseLayoutPhotos(sliceRecords, slots.length, fourth.length);
+            const fourthSlotsN = Math.max(0, Math.min(3, sliceRecords.length - mainSlotCount));
+
+            const fourthEl = mount.querySelector(".fourth-row");
+
+            let fourthLive = [];
+
+            if (fourthEl) {
+
+                if (fourthSlotsN === 0) {
+
+                    fourthEl.remove();
+
+                } else {
+
+                    fourthEl.classList.add(`fourth-row--slots-${fourthSlotsN}`);
+
+                    const left = fourthEl.querySelector(".fourth-left");
+
+                    const mid = fourthEl.querySelector(".fourth-mid");
+
+                    const right = fourthEl.querySelector(".fourth-right");
+
+                    if (fourthSlotsN === 1 && left && mid && right) {
+
+                        left.remove();
+
+                        right.remove();
+
+                    } else if (fourthSlotsN === 2 && right) {
+
+                        right.remove();
+
+                    }
+
+                    fourthLive = [...fourthEl.querySelectorAll(".slot")];
+
+                }
+
+            }
+
+            const chosen = chooseLayoutPhotos(sliceRecords, mainSlotCount, fourthSlotsN);
 
             slots.forEach((slot, i) => {
 
@@ -594,7 +1204,7 @@
 
             });
 
-            fourth.forEach((slot, i) => {
+            fourthLive.forEach((slot, i) => {
 
                 const item = chosen.fourth[i];
 
@@ -616,9 +1226,9 @@
 
 
 
-        if (unique.length >= MOSAIC_UNIQUE_MIN) {
+        if (unique.length >= mosaicThreshold) {
 
-            const sliceRecords = unique.slice(0, MOSAIC_UNIQUE_MIN);
+            const sliceRecords = unique.slice(0, Math.min(unique.length, mosaicSliceCap));
 
             applyFullMosaic(sliceRecords);
 
@@ -775,6 +1385,10 @@
         dedupeByFileName,
 
         MOSAIC_UNIQUE_MIN,
+
+        SEGMENT_CATALOG,
+
+        solveUniqueSegmentPlan,
 
         syncSecondRowSizing,
 

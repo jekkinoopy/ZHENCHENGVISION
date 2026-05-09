@@ -18,6 +18,19 @@
     padding: 34px 24px 0;
 }
 
+/* 萬象等多段版面：區塊之間留白，區塊內仍沿用各 template 網格 */
+.gallery-mount--composed {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    width: 100%;
+}
+
+.gallery-layout-segment {
+    width: 100%;
+    margin: 0;
+}
+
 .gallery-heading {
     display: flex;
     align-items: center;
@@ -161,19 +174,19 @@
     grid-template-columns: repeat(6, 1fr);
     grid-template-areas:
         "a a a b b b"
-        "c c c c d d"
-        "c c c c e e"
-        "f f f g g g";
+        "d d d c c c"
+        "e e e c c c"
+        "g g g g f f";
     gap: var(--gap);
 }
 
-/* 僅馬賽克「第二列」：左高大、右上下兩格（僅排版，不含第一／三／四列） */
+/* 僅馬賽克「第二區」三格：左上下兩橫、右直幅跨兩列（對齊萬象草稿） */
 .mosaic-grid.mosaic-grid--row2-only {
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: auto auto;
     grid-template-areas:
-        "c c c c d d"
-        "c c c c e e";
+        "d d d c c c"
+        "e e e c c c";
 }
 
 .slot {
@@ -206,35 +219,85 @@
     aspect-ratio: 3 / 2;
 }
 
-/* 第二排右側維持同樣 3:2，高度由比例自動算 */
+/* 馬賽克第二區左右小橫（d/e）：3:2；列高交由 syncSecondRowSizing 與直幅欄對齊 */
 .slot-4,
 .slot-5 {
     aspect-ratio: 3 / 2;
 }
 
-/* 第二排左側高度由公式計算，確保左右同高 */
+/* 第二區直幅（c）＋小橫列高由 JS 同步 */
 .slot-3,
 .slot-4,
 .slot-5 {
     height: auto;
 }
 
+/* 第四列：與馬賽克同 6 欄軌；三格「直｜橫｜直」同一列，比例約 4∶9∶4 → 欄數 1＋4＋1，中大橫接滿含 f 下方、不留右側破洞 */
 .fourth-row {
     --gap: 14px;
     margin-top: 14px;
     display: grid;
-    grid-template-columns: 4fr 9fr 4fr;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: var(--gap);
     align-items: stretch;
 }
 
 .fourth-left,
-.fourth-right {
-    height: 100%;
+.fourth-right,
+.fourth-mid {
+    min-width: 0;
 }
 
-.fourth-mid {
-    height: 100%;
+.fourth-row.fourth-row--slots-3 {
+    grid-template-rows: auto;
+}
+
+.fourth-row.fourth-row--slots-3 .fourth-left {
+    grid-column: 1 / 2;
+    grid-row: 1;
+    align-self: stretch;
+    min-height: 0;
+}
+
+/* 橫幅定列高（3∶2）；兩側直 stretch 等高，框內圖維持 slot 規則 */
+.fourth-row.fourth-row--slots-3 .fourth-mid {
+    grid-column: 2 / 6;
+    grid-row: 1;
+    aspect-ratio: 3 / 2;
+    align-self: start;
+    height: auto;
+}
+
+.fourth-row.fourth-row--slots-3 .fourth-right {
+    grid-column: 6 / -1;
+    grid-row: 1;
+    align-self: stretch;
+    min-height: 0;
+}
+
+/* 兩格（僅餘側＋中大）：同上思路，大中橫全寬、側在下 */
+.fourth-row.fourth-row--slots-2 .fourth-mid {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    aspect-ratio: 3 / 2;
+}
+
+.fourth-row.fourth-row--slots-2 .fourth-left {
+    grid-column: 1 / 2;
+    grid-row: 2;
+    aspect-ratio: 3 / 4;
+}
+
+.fourth-row.fourth-row--slots-1 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    max-width: min(840px, 100%);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fourth-row.fourth-row--slots-1 .fourth-mid {
+    grid-column: 2 / span 4;
+    aspect-ratio: 3 / 2;
 }
 
 /* 1／2／4／5〜9：簡版與備用版面 */
@@ -312,88 +375,213 @@
     object-position: center top;
 }
 
-/* 一橫一直：同列等高、橫／直皆以 cover 貼框 */
+/* 一直一橫：列高鎖定；左直固定寬、右橫彈性；圖絕對貼框 cover（壓過 .slot-photo-portrait 的 contain） */
 .layout-mix--1h1v {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-    grid-template-rows: clamp(280px, 38vw, 500px);
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    box-sizing: border-box;
     gap: 14px;
     width: 100%;
     margin-bottom: 20px;
-    align-items: stretch;
+    min-height: 0;
+    height: clamp(280px, 38vw, 500px);
+}
+
+.layout-mix--1h1v .layout-mix-portrait {
+    flex: 0 0 clamp(118px, 26vw, 220px);
+    width: clamp(118px, 26vw, 220px);
+    max-width: 220px;
+    min-width: 100px;
+    align-self: stretch;
+    min-height: 0;
+}
+
+.layout-mix--1h1v .layout-mix-landscape {
+    flex: 1 1 0%;
+    min-width: 0;
+    min-height: 0;
+    align-self: stretch;
 }
 
 .layout-mix--1h1v .slot {
-    min-width: 0 !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
     position: relative;
+    border-radius: var(--gallery-card-radius, 8px);
+    background: transparent;
 }
 
-/* 橫／直對稱：只認 slot > img，避開全域 .slot-photo-portrait 的 contain 與外包 frame */
+.layout-mix--1h1v .slot.slot-photo-portrait {
+    background: transparent;
+}
+
 .layout-mix--1h1v .slot > img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    max-width: none;
-    max-height: none;
-    object-fit: cover;
-    object-position: center top;
     display: block;
+    object-fit: cover !important;
+    object-position: center top;
+    max-width: none !important;
+    max-height: none !important;
 }
 
-/* 兩橫一直：左直欄總高＝右側兩橫＋間距；直圖上下與該總高對齊 */
+/* 兩橫一直：左上下兩橫、右直幅等高（僅 3 張且 2L+1P 時；圖絕對貼框 cover） */
 .layout-mix--2h1v {
     display: grid;
-    grid-template-columns: minmax(120px, 34%) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(118px, 34%);
     grid-template-rows: auto auto;
     gap: 14px;
     align-items: stretch;
+    min-height: 0;
 }
 
 .layout-mix--2h1v .layout-mix-portrait-col {
-    grid-column: 1;
+    grid-column: 2;
     grid-row: 1 / -1;
     align-self: stretch;
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
+    position: relative;
     min-height: 0;
     min-width: 0;
+    overflow: hidden;
     background: transparent;
 }
 
-.layout-mix--2h1v .layout-mix-portrait-col img {
-    height: 100%;
-    width: auto;
-    max-width: 100%;
-    object-fit: contain;
-    object-position: center center;
-    display: block;
-    flex: 0 0 auto;
+.layout-mix--2h1v .layout-mix-h1,
+.layout-mix--2h1v .layout-mix-h2 {
+    position: relative;
+    overflow: hidden;
+    min-height: 0;
+    aspect-ratio: 3 / 2;
+    width: 100%;
 }
 
 .layout-mix--2h1v .layout-mix-h1 {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1;
-    aspect-ratio: 3 / 2;
-    width: 100%;
 }
 
 .layout-mix--2h1v .layout-mix-h2 {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 2;
-    aspect-ratio: 3 / 2;
-    width: 100%;
 }
 
+.layout-mix--2h1v .layout-mix-portrait-col img,
 .layout-mix--2h1v .layout-mix-landscape img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     display: block;
-    object-fit: cover;
+    object-fit: cover !important;
     object-position: center top;
+    max-width: none !important;
+    max-height: none !important;
+}
+
+/* 文化影像 8 張：2v + (2v+1h) + (1v+2v)；全格 cover（壓過直式預設 contain） */
+.layout-culture-eight .culture-slot {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--gallery-card-radius, 8px);
+    background: #f4f3f2;
+}
+
+.layout-culture-eight .culture-slot > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover !important;
+    object-position: center top;
+    max-width: none !important;
+    max-height: none !important;
+}
+
+.layout-culture--2v {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 14px;
+    width: 100%;
+}
+
+.layout-culture--2v .culture-2v-a,
+.layout-culture--2v .culture-2v-b {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: clamp(260px, 42vw, 520px);
+    max-height: min(620px, 88vw);
+}
+
+/* 並排二直｜一橫：兩窄直 + 右側主橫，列高依橫圖比例 */
+.layout-culture--2v1h {
+    display: grid;
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 0.92fr) minmax(0, 2fr);
+    grid-template-rows: auto;
+    gap: 14px;
+    align-items: stretch;
+    width: 100%;
+}
+
+.layout-culture--2v1h .culture-2v1h-p {
+    grid-row: 1;
+    min-height: 0;
+    align-self: stretch;
+    height: 100%;
+}
+
+.layout-culture--2v1h .culture-2v1h-p1 {
+    grid-column: 1;
+}
+
+.layout-culture--2v1h .culture-2v1h-p2 {
+    grid-column: 2;
+}
+
+.layout-culture--2v1h .culture-2v1h-h {
+    grid-column: 3;
+    grid-row: 1;
+    min-height: 0;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+}
+
+/* 左一整直 + 右上下兩直 */
+.layout-culture--1v2v {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: 1fr 1fr;
+    gap: 14px;
+    align-items: stretch;
+    width: 100%;
+    min-height: 0;
+}
+
+.layout-culture--1v2v .culture-1v2v-left {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    min-height: 0;
+}
+
+.layout-culture--1v2v .culture-1v2v-rt-top {
+    grid-column: 2;
+    grid-row: 1;
+    min-height: 0;
+    aspect-ratio: 2 / 3;
+    align-self: stretch;
+}
+
+.layout-culture--1v2v .culture-1v2v-rt-bot {
+    grid-column: 2;
+    grid-row: 2;
+    min-height: 0;
+    aspect-ratio: 2 / 3;
+    align-self: stretch;
 }
 
 /* 四張／2×2：每格獨立欄避免疊圖；列內對齊 */
@@ -582,15 +770,18 @@
         grid-template-columns: 1fr 1fr;
         grid-template-areas:
             "a b"
+            "d d"
+            "e e"
             "c c"
-            "d e"
-            "f g";
+            "g f";
     }
 
     .mosaic-grid.mosaic-grid--row2-only {
+        grid-template-rows: auto auto auto;
         grid-template-areas:
-            "c c"
-            "d e";
+            "d d"
+            "e e"
+            "c c";
     }
 
     .layout-four-banner-row {
@@ -611,17 +802,28 @@
         width: 100%;
     }
 
-    /* 手機：改單欄，高度改由各自 aspect-ratio */
+    /* 手機：直欄／橫欄改直向堆疊，各自比例 */
     .layout-mix--1h1v {
-        grid-template-columns: 1fr !important;
-        grid-template-rows: none !important;
+        flex-direction: column !important;
         height: auto !important;
         gap: 14px;
+    }
+
+    .layout-mix--1h1v .layout-mix-portrait {
+        flex: 0 1 auto !important;
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0 !important;
+    }
+
+    .layout-mix--1h1v .layout-mix-landscape {
+        flex: 0 1 auto !important;
     }
 
     .layout-mix--1h1v .slot {
         width: 100% !important;
         aspect-ratio: 3 / 2;
+        height: auto !important;
     }
 
     .layout-mix--1h1v .slot.slot-photo-portrait {
@@ -634,36 +836,128 @@
         grid-template-rows: auto auto auto;
     }
 
-    .layout-mix--2h1v .layout-mix-portrait-col {
-        grid-column: 1;
-        grid-row: 1;
-        min-height: 220px;
-    }
-
     .layout-mix--2h1v .layout-mix-h1 {
         grid-column: 1;
-        grid-row: 2;
+        grid-row: 1;
     }
 
     .layout-mix--2h1v .layout-mix-h2 {
         grid-column: 1;
+        grid-row: 2;
+    }
+
+    .layout-mix--2h1v .layout-mix-portrait-col {
+        grid-column: 1;
         grid-row: 3;
+        min-height: 220px;
+        aspect-ratio: 2 / 3;
+        max-height: 480px;
+    }
+
+    /* 文化影像固定版：窄螢幕改直向堆疊 */
+
+    .layout-culture--2v {
+        flex-direction: column;
+    }
+
+    .layout-culture--2v .culture-2v-a,
+    .layout-culture--2v .culture-2v-b {
+        min-height: auto;
+        aspect-ratio: 2 / 3;
+        max-height: 480px;
+    }
+
+    .layout-culture--2v1h {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .layout-culture--2v1h .culture-2v1h-p1 {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .layout-culture--2v1h .culture-2v1h-p2 {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .layout-culture--2v1h .culture-2v1h-h {
+        grid-column: 1;
+        grid-row: 3;
+        aspect-ratio: 3 / 2;
+        align-self: stretch;
+        width: 100%;
+    }
+
+    .layout-culture--1v2v {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .layout-culture--1v2v .culture-1v2v-left {
+        grid-column: 1;
+        grid-row: 1;
+        aspect-ratio: 2 / 3;
+        max-height: 520px;
+    }
+
+    .layout-culture--1v2v .culture-1v2v-rt-top {
+        grid-column: 1;
+        grid-row: 2;
+        max-height: 480px;
+    }
+
+    .layout-culture--1v2v .culture-1v2v-rt-bot {
+        grid-column: 1;
+        grid-row: 3;
+        max-height: 480px;
     }
 
     .fourth-row {
         --gap: 10px;
         grid-template-columns: 1fr 1fr;
-        grid-template-areas:
-            "l r"
-            "m m";
         align-items: stretch;
     }
 
-    .fourth-left { grid-area: l; }
-    .fourth-right { grid-area: r; }
-    .fourth-mid { grid-area: m; }
+    /* 沿用桌面邏輯：手機縮成二欄，下橫在第二列維持對齊；上列兩直左右與馬賽克第四列對調視覺一致 */
+    .fourth-row.fourth-row--slots-3 .fourth-left {
+        grid-column: 2;
+        grid-row: 1;
+    }
 
-    .fourth-mid {
+    .fourth-row.fourth-row--slots-3 .fourth-right {
+        grid-column: 1;
+        grid-row: 1;
+        justify-self: stretch;
+        width: auto;
+        max-width: none;
+    }
+
+    .fourth-row.fourth-row--slots-3 .fourth-mid {
+        grid-column: 1 / -1;
+        grid-row: 2;
         aspect-ratio: 3 / 2;
+    }
+
+    .fourth-row.fourth-row--slots-2 .fourth-mid {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    .fourth-row.fourth-row--slots-2 .fourth-left {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+
+    .fourth-row.fourth-row--slots-1 {
+        grid-template-columns: 1fr;
+        max-width: none;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .fourth-row.fourth-row--slots-1 .fourth-mid {
+        grid-column: 1 / -1;
     }
 }
