@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>萬象足跡 | ZHEN CHENG VISION</title>
+
+    <meta name="description" content="視界成珍萬象足跡：文化、昆蟲、地景與植物等主題影像。">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="bird-gallery.css">
+
+</head>
+
+<body>
+
+    <script src="nav-loader.js"></script>
+
+    <nav>
+
+        <div class="logo"><a href="index.html"><img src="images/ZHENCHENGVISION.svg" alt="視界成珍 Logo"></a></div>
+
+        <ul class="nav-list">
+
+            <li><a href="bird-gallery.html#bird-gallery">羽翼視界</a></li>
+
+            <li class="nav-dropdown">
+
+                <a href="wanxiang-gallery.html" aria-current="page">萬象足跡</a>
+
+                <ul class="nav-dropdown-menu" aria-label="萬象足跡分類">
+
+                    <li><a href="wanxiang-gallery.html#culture">文化影像</a></li>
+
+                    <li><a href="wanxiang-gallery.html#insects">昆蟲生態</a></li>
+
+                    <li><a href="wanxiang-gallery.html#landscapes">地景風光</a></li>
+
+                    <li><a href="wanxiang-gallery.html#flora">植物生態</a></li>
+
+                </ul>
+
+            </li>
+
+            <li>
+                <span class="nav-item-disabled" title="頁面籌備中，暫未開放" aria-disabled="true">榮耀印記 <span class="nav-soon-badge" aria-hidden="true">準備中</span></span>
+            </li>
+
+            <li>
+                <span class="nav-item-disabled" title="頁面籌備中，暫未開放" aria-disabled="true">關於成珍 <span class="nav-soon-badge" aria-hidden="true">準備中</span></span>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+
+    <main class="gallery-shell">
+
+        <section class="gallery-heading">
+
+            <span class="line"></span>
+
+            <h1>萬象足跡</h1>
+
+            <span class="line"></span>
+
+        </section>
+
+
+
+        <section class="gallery-tabs" aria-label="萬象足跡主題分類">
+
+            <button class="gallery-tab active" type="button" data-slug="culture" data-folder="gallery-culture">文化影像</button>
+
+            <button class="gallery-tab" type="button" data-slug="insects" data-folder="gallery-insects">昆蟲生態</button>
+
+            <button class="gallery-tab" type="button" data-slug="landscapes" data-folder="gallery-landscapes">地景風光</button>
+
+            <button class="gallery-tab" type="button" data-slug="flora" data-folder="gallery-flora">植物生態</button>
+
+        </section>
+
+
+
+        <!-- data-four-layout="one-plus-three" ：四張時為「上一大三小」；預設不寫則為 2×2 -->
+        <div id="wanxiangGalleryMount" class="wanxiang-gallery-mount"></div>
+
+    </main>
+
+
+
+    <template id="galleryLayoutTpl">
+
+        <div class="mosaic-grid">
+
+            <div class="slot slot-1 row-1-left"></div>
+
+            <div class="slot slot-2 row-1-right"></div>
+
+            <div class="slot slot-3 row-2-left"></div>
+
+            <div class="slot slot-4 row-2-right-top"></div>
+
+            <div class="slot slot-5 row-2-right-bottom"></div>
+
+            <div class="slot slot-6 row-3-left"></div>
+
+            <div class="slot slot-7 row-3-right"></div>
+
+        </div>
+
+        <div class="fourth-row">
+
+            <div class="slot fourth-left"></div>
+
+            <div class="slot fourth-mid"></div>
+
+            <div class="slot fourth-right"></div>
+
+        </div>
+
+    </template>
+
+    <template id="galleryLayoutTpl1">
+        <div class="layout-one"><div class="slot"></div></div>
+    </template>
+
+    <template id="galleryLayoutTpl2">
+        <div class="layout-two"><div class="slot"></div><div class="slot"></div></div>
+    </template>
+
+    <template id="galleryLayoutTplMix1h1v">
+        <div class="layout-mix layout-mix--1h1v">
+            <div class="slot layout-mix-landscape"><div class="layout-gallery-cover-frame"></div></div>
+            <div class="slot layout-mix-portrait slot-photo-portrait"></div>
+        </div>
+    </template>
+
+    <template id="galleryLayoutTplMix2h1v">
+        <div class="layout-mix layout-mix--2h1v">
+            <div class="slot layout-mix-portrait-col"></div>
+            <div class="slot layout-mix-landscape layout-mix-h1"></div>
+            <div class="slot layout-mix-landscape layout-mix-h2"></div>
+        </div>
+    </template>
+
+    <template id="galleryLayoutTpl3SecondRow">
+        <div class="mosaic-grid mosaic-grid--row2-only">
+            <div class="slot slot-3 row-2-left"></div>
+            <div class="slot slot-4 row-2-right-top"></div>
+            <div class="slot slot-5 row-2-right-bottom"></div>
+        </div>
+    </template>
+
+    <template id="galleryLayoutTpl4TwoByTwo">
+        <div class="layout-four-stacked-rows">
+            <div class="layout-four-row-pair">
+                <div class="layout-four-cell"><div class="slot"></div></div>
+                <div class="layout-four-cell"><div class="slot"></div></div>
+            </div>
+            <div class="layout-four-row-pair">
+                <div class="layout-four-cell"><div class="slot"></div></div>
+                <div class="layout-four-cell"><div class="slot"></div></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="galleryLayoutTpl4OnePlusThree">
+        <div class="layout-four-banner">
+            <div class="slot layout-four-banner-hero"></div>
+            <div class="layout-four-banner-row">
+                <div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="galleryLayoutTplFlex">
+        <div class="layout-flex-grid"></div>
+    </template>
+
+    <script src="gallery-mosaic.js"></script>
+
+    <script>
+
+        const FALLBACK_MANIFEST = {
+
+            "gallery-culture": ["culture001.jpg", "culture002.jpg", "culture003.jpg"],
+
+            "gallery-flora": ["flora001.jpg", "flora002.jpg", "flora003.jpg"],
+
+            "gallery-insects": ["insects001.jpg", "insects002.jpg", "insects003.jpg"],
+
+            "gallery-landscapes": ["landscapes001.jpg", "landscapes002.jpg", "landscapes003.jpg"],
+
+        };
+
+
+
+        const TAB_SLUG_TO_FOLDER = {
+
+            culture: "gallery-culture",
+
+            insects: "gallery-insects",
+
+            landscapes: "gallery-landscapes",
+
+            flora: "gallery-flora",
+
+        };
+
+
+
+        let categoryRecords = {};
+
+        let activeSlug = "culture";
+
+
+
+        function refreshLayouts() {
+
+            const mount = document.getElementById("wanxiangGalleryMount");
+
+            if (!mount || mount.querySelector(".empty-msg")) return;
+
+            GalleryMosaic.syncSecondRowSizing(mount);
+
+            GalleryMosaic.syncFourthRowSizing(mount);
+
+        }
+
+
+
+        function setActiveTab(slug, updateHash) {
+
+            activeSlug = slug in TAB_SLUG_TO_FOLDER ? slug : "culture";
+
+            document.querySelectorAll(".gallery-tab").forEach((b) => {
+
+                b.classList.toggle("active", b.dataset.slug === activeSlug);
+
+            });
+
+            const folder = TAB_SLUG_TO_FOLDER[activeSlug];
+
+            const records = categoryRecords[folder] || [];
+
+            const mount = document.getElementById("wanxiangGalleryMount");
+
+            if (!records.length) {
+
+                mount.innerHTML = '<p class="empty-msg">此主題目前尚無影像。</p>';
+
+            } else {
+
+                GalleryMosaic.renderGallery(mount, folder, records);
+
+            }
+
+            if (updateHash) location.hash = activeSlug;
+
+            requestAnimationFrame(() => requestAnimationFrame(() => refreshLayouts()));
+
+        }
+
+
+
+        function applyHash() {
+
+            const raw = (location.hash || "").replace(/^#/, "").toLowerCase();
+
+            const slug = raw && TAB_SLUG_TO_FOLDER[raw] ? raw : "culture";
+
+            setActiveTab(slug, false);
+
+        }
+
+
+
+        document.querySelectorAll(".gallery-tab").forEach((btn) => {
+
+            btn.addEventListener("click", () => setActiveTab(btn.dataset.slug, true));
+
+        });
+
+        window.addEventListener("hashchange", applyHash);
+
+
+
+        async function bootstrap() {
+
+            let manifest;
+
+            try {
+
+                const res = await fetch("./gallery-manifest.json", { cache: "no-store" });
+
+                if (!res.ok) throw new Error("manifest");
+
+                manifest = await res.json();
+
+            } catch {
+
+                manifest = FALLBACK_MANIFEST;
+
+            }
+
+            const nonBirdFolders = Object.keys(TAB_SLUG_TO_FOLDER).map((s) => TAB_SLUG_TO_FOLDER[s]);
+
+            const entries = await Promise.all(
+
+                nonBirdFolders.map(async (folder) => {
+
+                    const files = manifest[folder] || FALLBACK_MANIFEST[folder] || [];
+
+                    const rec = await GalleryMosaic.enrichOrientation(files.map(GalleryMosaic.parseBirdFile), folder);
+
+                    return [folder, rec];
+
+                })
+
+            );
+
+            categoryRecords = Object.fromEntries(entries);
+
+            applyHash();
+
+        }
+
+
+
+        bootstrap().then(() => {
+
+            requestAnimationFrame(() => requestAnimationFrame(() => refreshLayouts()));
+
+        });
+
+        window.addEventListener("resize", refreshLayouts);
+
+    </script>
+
+</body>
+
+</html>
+
+

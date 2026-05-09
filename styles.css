@@ -72,8 +72,12 @@
            list-style: none;
        }
 
-       nav ul li {
+       nav ul.nav-list>li {
            margin-left: 30px;
+       }
+
+       nav ul.nav-list>li:first-child {
+           margin-left: 0;
        }
 
        nav ul li a {
@@ -85,6 +89,84 @@
 
        nav ul li a:hover {
            color: var(--accent);
+       }
+
+       /** 選單項目：無內容、暫不開放連結（全站統一） */
+       nav .nav-item-disabled {
+           display: inline-flex;
+           align-items: center;
+           gap: 6px;
+           color: #b5b2b1;
+           cursor: not-allowed;
+           pointer-events: none;
+           user-select: none;
+           font-size: 0.9rem;
+       }
+
+       nav .nav-soon-badge {
+           font-size: 0.62rem;
+           font-weight: 600;
+           letter-spacing: 0.06em;
+           color: #9a9492;
+           border: 1px solid #e3dfde;
+           border-radius: 4px;
+           padding: 2px 6px;
+           line-height: 1.25;
+           background: #f7f6f5;
+       }
+
+       nav ul.nav-list {
+           align-items: center;
+           margin: 0;
+           padding: 14px 0;
+       }
+
+       /* 萬象足跡：子分類下拉 */
+       .nav-dropdown {
+           position: relative;
+       }
+
+       .nav-dropdown>a {
+           display: inline-flex;
+           align-items: center;
+       }
+
+       .nav-dropdown-menu {
+           display: none;
+           position: absolute;
+           left: 0;
+           top: calc(100% + 4px);
+           margin: 0;
+           padding: 8px 0;
+           min-width: 168px;
+           list-style: none;
+           background: #fff;
+           border: 1px solid #eee;
+           box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+           flex-direction: column;
+           z-index: 1100;
+       }
+
+       .nav-dropdown-menu li {
+           margin: 0;
+       }
+
+       .nav-dropdown-menu a {
+           display: block;
+           padding: 8px 18px;
+           font-size: 0.88rem;
+           white-space: nowrap;
+           color: var(--text-main);
+       }
+
+       .nav-dropdown-menu a:hover {
+           color: var(--accent);
+           background: var(--bg-light);
+       }
+
+       .nav-dropdown:hover>.nav-dropdown-menu,
+       .nav-dropdown:focus-within>.nav-dropdown-menu {
+           display: flex;
        }
 
        .nav-icons {
