@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圖庫分頁 | ZHEN CHENG VISION</title>
+    <meta name="description" content="鳥類與其他圖庫分類頁。">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="bird-gallery.css">
+</head>
+<body>
+    <script src="nav-loader.js"></script>
+    <nav>
+        <div class="logo"><img src="images/ZHENCHENGVISION.svg" alt="視界成珍 Logo"></div>
+        <ul>
+            <li><a href="index.html">首頁</a></li>
+            <li><a href="bird-gallery.html">圖庫分頁</a></li>
+            <li><a href="#">素材分類</a></li>
+            <li><a href="#">關於我們</a></li>
+            <li><a href="#">獲獎紀錄</a></li>
+        </ul>
+    </nav>
+
+    <main class="gallery-shell">
+        <section class="gallery-heading">
+            <span class="line"></span>
+            <h1>Gallery</h1>
+            <span class="line"></span>
+        </section>
+
+        <section class="gallery-tabs" aria-label="圖庫分頁">
+            <button class="gallery-tab active" type="button" data-panel="birdsPanel">鳥類</button>
+            <button class="gallery-tab" type="button" data-panel="othersPanel">其他分類</button>
+        </section>
+
+        <section id="birdsPanel" class="gallery-panel active">
+            <section class="species-title-wrap">
+                <p class="species-title-label">Bird Species</p>
+                <div id="speciesTitleList" class="species-title-list"></div>
+            </section>
+            <div id="birdGalleryMount"></div>
+        </section>
+
+        <section id="othersPanel" class="gallery-panel">
+            <div id="otherCategorySections"></div>
+        </section>
+    </main>
+
+    <template id="galleryLayoutTpl">
+        <div class="mosaic-grid">
+            <div class="slot slot-1 row-1-left"></div>
+            <div class="slot slot-2 row-1-right"></div>
+            <div class="slot slot-3 row-2-left"></div>
+            <div class="slot slot-4 row-2-right-top"></div>
+            <div class="slot slot-5 row-2-right-bottom"></div>
+            <div class="slot slot-6 row-3-left"></div>
+            <div class="slot slot-7 row-3-right"></div>
+        </div>
+        <div class="fourth-row">
+            <div class="slot fourth-left"></div>
+            <div class="slot fourth-mid"></div>
+            <div class="slot fourth-right"></div>
+        </div>
+    </template>
+
+    <script>
+        const FALLBACK_MANIFEST = {
+            "gallery-birds": ["五色鳥001.jpg", "五色鳥002.jpg", "五色鳥003.jpg", "環頸雉001.jpg", "環頸雉002.jpg", "翠鳥001.jpg", "翠鳥002.jpg", "黑枕藍鶲001.jpg"],
+            "gallery-culture": ["culture001.jpg", "culture002.jpg", "culture003.jpg"],
+            "gallery-flora": ["flora001.jpg", "flora002.jpg", "flora003.jpg"],
+            "gallery-insects": ["insects001.jpg", "insects002.jpg", "insects003.jpg"],
+            "gallery-landscapes": ["landscapes001.jpg", "landscapes002.jpg", "landscapes003.jpg"]
+        };
+        let allBirdRecords = [];
+        let allCategoryRecords = {};
+        let activeSpecies = "all";
+
+        function parseBirdFile(fileName) {
+            const cleanName = fileName.replace(/\.[^/.]+$/, "");
+            const m = cleanName.match(/^(.*?)[_\-\s]?(\d{1,4})$/);
+            return {
+                species: m ? (m[1] || "Uncategorized").trim() : (cleanName || "Uncategorized"),
+                photoTitle: m ? `Photo ${m[2]}` : "Untitled",
+                fileName
+            };
+        }
+
+        async function enrichOrientation(records, folderName) {
+            return Promise.all(records.map((record) => new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve({ ...record, orientation: img.naturalHeight > img.naturalWidth ? "portrait" : "landscape" });
+                img.onerror = () => resolve({ ...record, orientation: "landscape" });
+                img.src = `images/${folderName}/${record.fileName}`;
+            })));
+        }
+
+        function chooseLayoutPhotos(records, mainCount, fourthCount) {
+            const landscape = records.filter((r) => r.orientation !== "portrait");
+            const portrait = records.filter((r) => r.orientation === "portrait");
+            let ai = 0, li = 0, pi = 0;
+            const from = (pool, i) => (pool.length ? pool[i % pool.length] : null);
+            const pick = (portraitFirst = false) => {
+                const p = portraitFirst ? from(portrait, pi++) : from(landscape, li++);
+                const f = portraitFirst ? from(landscape, li++) : from(portrait, pi++);
+                return p || f || from(records, ai++);
+            };
+            return { main: Array.from({ length: mainCount }, () => pick(false)), fourth: Array.from({ length: fourthCount }, (_, i) => (i === 1 ? pick(false) : pick(true))) };
+        }
+
+        function createGalleryBlock() {
+            return document.getElementById("galleryLayoutTpl").content.cloneNode(true);
+        }
+
+        function syncSecondRowSizing(scope) {
+            const grid = scope.querySelector(".mosaic-grid");
+            const s3 = grid?.querySelector(".slot-3");
+            const s4 = grid?.querySelector(".slot-4");
+            const s5 = grid?.querySelector(".slot-5");
+            if (!grid || !s3 || !s4 || !s5) return;
+            const gap = parseFloat(getComputedStyle(grid).gap || "14") || 14;
+            const h = s4.clientWidth * (2 / 3);
+            s4.style.height = `${h}px`; s5.style.height = `${h}px`; s3.style.height = `${h * 2 + gap}px`;
+        }
+
+        function syncFourthRowSizing(scope) {
+            const row = scope.querySelector(".fourth-row");
+            if (!row) return;
+            const gap = parseFloat(getComputedStyle(row).gap || "14") || 14;
+            const w = row.clientWidth;
+            if (!w) return;
+            row.style.height = `${((w - 2 * gap) * 6) / 17}px`;
+        }
+
+        function renderGallery(records, folderName, mount) {
+            mount.innerHTML = "";
+            mount.appendChild(createGalleryBlock());
+            const slots = mount.querySelectorAll(".mosaic-grid .slot");
+            const fourth = mount.querySelectorAll(".fourth-row .slot");
+            const chosen = chooseLayoutPhotos(records, slots.length, fourth.length);
+            slots.forEach((slot, i) => { const item = chosen.main[i]; slot.innerHTML = `<img src="images/${folderName}/${item.fileName}" alt="${item.species} - ${item.photoTitle}">`; });
+            fourth.forEach((slot, i) => { const item = chosen.fourth[i]; slot.innerHTML = `<img src="images/${folderName}/${item.fileName}" alt="${item.species} - ${item.photoTitle}">`; });
+            syncSecondRowSizing(mount); syncFourthRowSizing(mount);
+            requestAnimationFrame(() => { syncSecondRowSizing(mount); syncFourthRowSizing(mount); });
+        }
+
+        function renderSpeciesTitles(records) {
+            const host = document.getElementById("speciesTitleList");
+            const names = Array.from(new Set(records.map((r) => r.species).filter(Boolean))).filter((n) => !n.startsWith("LINE_ALBUM"));
+            const counts = names.map((name) => ({ name, count: records.filter((r) => r.species === name).length }));
+            host.innerHTML = [`<button class="species-chip ${activeSpecies === "all" ? "active" : ""}" data-species="all" type="button">全部</button>`,
+                ...counts.map(({ name, count }) => `<button class="species-chip ${activeSpecies === name ? "active" : ""}" data-species="${name}" type="button">${name} (${count})</button>`)].join("");
+        }
+
+        function toTitle(folderName) {
+            const key = folderName.replace(/^gallery-/, "");
+            return ({ culture: "文化影像", flora: "植物生態", insects: "昆蟲生態", landscapes: "地景風光" })[key] || key;
+        }
+
+        function renderBirds() {
+            const filtered = activeSpecies === "all" ? allBirdRecords : allBirdRecords.filter((r) => r.species === activeSpecies);
+            renderGallery(filtered.length ? filtered : allBirdRecords, "gallery-birds", document.getElementById("birdGalleryMount"));
+        }
+
+        function renderOthers() {
+            const host = document.getElementById("otherCategorySections");
+            const entries = Object.entries(allCategoryRecords).filter(([name]) => name !== "gallery-birds");
+            if (!entries.length) { host.innerHTML = '<p class="empty-msg">目前沒有其他分類資料夾。</p>'; return; }
+            host.innerHTML = entries.map(([folder]) => `<section class="category-block" id="${folder.replace("gallery-", "")}"><h2 class="category-title">${toTitle(folder)}</h2><div class="category-gallery" data-folder="${folder}"></div></section>`).join("");
+            host.querySelectorAll(".category-gallery").forEach((mount) => renderGallery(allCategoryRecords[mount.dataset.folder], mount.dataset.folder, mount));
+        }
+
+        async function bootstrap() {
+            let manifest;
+            try {
+                const res = await fetch("./gallery-manifest.json", { cache: "no-store" });
+                if (!res.ok) throw new Error("manifest");
+                manifest = await res.json();
+            } catch { manifest = FALLBACK_MANIFEST; }
+            const entries = await Promise.all(Object.entries(manifest).map(async ([folder, files]) => [folder, await enrichOrientation(files.map(parseBirdFile), folder)]));
+            allCategoryRecords = Object.fromEntries(entries);
+            allBirdRecords = allCategoryRecords["gallery-birds"] || [];
+            renderSpeciesTitles(allBirdRecords);
+            renderBirds();
+            renderOthers();
+        }
+
+        document.getElementById("speciesTitleList").addEventListener("click", (event) => {
+            const btn = event.target.closest(".species-chip");
+            if (!btn) return;
+            activeSpecies = btn.dataset.species || "all";
+            renderSpeciesTitles(allBirdRecords);
+            renderBirds();
+        });
+
+        function switchPanel(panelId, updateHash = false) {
+            document.querySelectorAll(".gallery-tab").forEach((b) => b.classList.remove("active"));
+            document.querySelectorAll(".gallery-panel").forEach((p) => p.classList.remove("active"));
+            const btn = document.querySelector(`.gallery-tab[data-panel="${panelId}"]`);
+            const panel = document.getElementById(panelId);
+            if (btn && panel) {
+                btn.classList.add("active");
+                panel.classList.add("active");
+                if (updateHash) location.hash = panelId === "othersPanel" ? "others" : "birds";
+            }
+        }
+
+        function applyHashRoute() {
+            const hash = (location.hash || "").toLowerCase().replace("#", "");
+            const others = new Set(["others", "culture", "insects", "landscapes", "flora"]);
+            if (others.has(hash)) {
+                switchPanel("othersPanel");
+                if (hash !== "others") {
+                    const section = document.getElementById(hash);
+                    if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            } else {
+                switchPanel("birdsPanel");
+            }
+        }
+
+        document.querySelectorAll(".gallery-tab").forEach((btn) => btn.addEventListener("click", () => switchPanel(btn.dataset.panel, true)));
+        window.addEventListener("resize", () => {
+            document.querySelectorAll(".gallery-panel.active .category-gallery, #birdGalleryMount").forEach((scope) => { syncSecondRowSizing(scope); syncFourthRowSizing(scope); });
+        });
+
+        bootstrap().then(() => applyHashRoute());
+    </script>
+</body>
+</html>
