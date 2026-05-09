@@ -179,6 +179,7 @@
 .slot {
     overflow: hidden;
     background: #fff;
+    border-radius: var(--gallery-card-radius, 8px);
 }
 
 .slot img {
