@@ -17,8 +17,9 @@ git commit -m "<type> <一句修改重點>"
 ```
 
 - `<type>` 三選一，以**本次變更主軸**擇一：`feat` | `fix` | `style`
-- `type` 與說明之間**空一格**；說明用繁中、簡短、講「為什麼／做了什麼」
-- 範例：`feat 文化影像八張固定 2v+(2v+1h)+(1v+2v) 版型`
+- `type` 與說明之間**空一格**；說明用繁中、講「做了什麼」
+- **說明（`type` 後面的那句）不得超過 15 字**（含標點；以使用者可見字元計）
+- 範例：`feat 文化八張固定版型`（8 字）、`fix 解決about衝突`（9 字）
 
 ---
 
@@ -139,4 +140,4 @@ GalleryMosaic.renderGallery(mount, folder, records, undefined, {
 
 ## 相關 commit 歷史提示
 
-大型圖庫改版曾用 `feat 調整圖庫版型(WIP)` 等訊息；後續請依上方 **feat/fix/style** 格式給使用者可貼上的 commit 一行摘要。
+後續 commit 摘要請依上方 **feat/fix/style + 空一格 + ≤15 字** 給使用者可貼上的一行。
