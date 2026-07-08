@@ -35,7 +35,7 @@
     </nav>
 
     <header class="hero">
-        <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
+        <div id="heroCarousel" class="carousel slide carousel-fade hero-carousel" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -44,12 +44,27 @@
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img src="images/gallery-birds/五色鳥001.jpg" class="d-block w-100" alt="五色鳥">
+                    <div class="hero-caption hero-caption--pos1">
+                        <h1 class="hero-caption-title">視野成珍</h1>
+                        <p class="hero-caption-sub">羽翼的靈動瞬間</p>
+                        <a href="#collections" class="cta-btn">進入圖庫</a>
+                    </div>
                 </div>
                 <div class="carousel-item">
                     <img src="images/gallery-birds/翠鳥001.jpg" class="d-block w-100" alt="翠鳥">
+                    <div class="hero-caption hero-caption--pos2">
+                        <h1 class="hero-caption-title">視野成珍</h1>
+                        <p class="hero-caption-sub">羽翼的靈動瞬間</p>
+                        <a href="#collections" class="cta-btn">進入圖庫</a>
+                    </div>
                 </div>
                 <div class="carousel-item">
                     <img src="images/gallery-birds/黑枕藍鶲001.jpg" class="d-block w-100" alt="黑枕藍鶲">
+                    <div class="hero-caption hero-caption--pos3">
+                        <h1 class="hero-caption-title">視野成珍</h1>
+                        <p class="hero-caption-sub">羽翼的靈動瞬間</p>
+                        <a href="#collections" class="cta-btn">進入圖庫</a>
+                    </div>
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
@@ -60,11 +75,6 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
-        </div>
-        <div class="hero-content">
-            <h1>視野成珍</h1>
-            <p>羽翼的靈動瞬間</p>
-            <a href="#collections" class="cta-btn">進入圖庫</a>
         </div>
     </header>
 
@@ -138,6 +148,21 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('.hero-caption-title, .hero-caption-sub').forEach((el) => {
+            const text = el.textContent;
+            el.setAttribute('aria-label', text);
+            el.innerHTML = '';
+            Array.from(text).forEach((ch, i) => {
+                const span = document.createElement('span');
+                span.className = 'char';
+                span.style.setProperty('--char-index', i);
+                span.textContent = ch === ' ' ? ' ' : ch;
+                span.setAttribute('aria-hidden', 'true');
+                el.appendChild(span);
+            });
+        });
+    </script>
 </body>
 
 </html>
