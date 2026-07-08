@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(cat /tmp/httpserver.log 2>&1; ps aux | grep http.server | grep -v grep)",
+      "Read(//tmp/**)",
+      "Bash(chromium-cli --help)",
+      "Bash(ls \"/c/Program Files/Google/Chrome/Application/\" 2>&1 | head)",
+      "Read(//c/Program Files/Google/Chrome/Application//**)",
+      "Bash(mkdir -p /tmp/shots)",
+      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --no-sandbox --window-size=1440,900 --screenshot=/tmp/shots/index.png \"file:///d:/Developer/projects/ZHENCHENGVISION/index.html\")",
+      "Read(//c/Users/User/AppData/Local/Temp/shots/**)",
+      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --no-sandbox --window-size=1440,1000 --screenshot=/tmp/shots/index2.png \"file:///d:/Developer/projects/ZHENCHENGVISION/index.html\")",
+      "Bash(rm -f /tmp/httpserver.pid /tmp/httpserver.log)"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
+    ]
+  }
+}

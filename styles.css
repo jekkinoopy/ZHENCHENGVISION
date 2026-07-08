@@ -194,17 +194,46 @@
        /* 3. 英雄看板區 (Hero Section) */
        .hero {
            height: 100vh;
-           background:
-               linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)),
-               url('images/gallery-birds/翠鳥001.jpg');
-           background-size: cover;
-           background-position: center;
-           display: flex;
-           flex-direction: column;
-           justify-content: center;
-           align-items: center;
+           position: relative;
+           overflow: hidden;
            color: white;
            text-align: center;
+       }
+
+       .hero-carousel,
+       .hero-carousel .carousel-inner,
+       .hero-carousel .carousel-item {
+           height: 100vh;
+       }
+
+       .hero-carousel .carousel-item img {
+           width: 100%;
+           height: 100vh;
+           object-fit: cover;
+       }
+
+       .hero-carousel .carousel-item::after {
+           content: '';
+           position: absolute;
+           inset: 0;
+           background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+       }
+
+       .hero-content {
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);
+           z-index: 2;
+           width: 100%;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           pointer-events: none;
+       }
+
+       .hero-content .cta-btn {
+           pointer-events: auto;
        }
 
        .hero h1 {
