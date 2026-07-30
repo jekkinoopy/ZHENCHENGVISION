@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>後台首頁 | 珍成視界 Admin</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <!-- 後台導覽列 -->
+    <nav class="navbar navbar-expand-lg admin-navbar navbar-dark">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="index.html">珍成視界 Admin</a>
+            <div class="d-flex align-items-center gap-2">
+                <a href="../index.html" class="nav-link d-inline-flex align-items-center gap-1">
+                    <i class="bi bi-box-arrow-up-left"></i> 回前台
+                </a>
+                <a href="../index.html" class="btn btn-outline-light btn-sm ms-2">
+                    <i class="bi bi-box-arrow-right"></i> 登出
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid admin-shell">
+        <div class="row">
+
+            <!-- 側邊選單 -->
+            <aside class="col-lg-2 admin-sidebar">
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="index.html"><i class="bi bi-speedometer2 me-2"></i>後台首頁</a>
+                    <a class="nav-link" href="photos/index.html"><i class="bi bi-images me-2"></i>攝影作品管理</a>
+                    <a class="nav-link" href="honors/index.html"><i class="bi bi-trophy me-2"></i>獎項管理</a>
+                    <span class="nav-link disabled"><i class="bi bi-tags me-2"></i>作品分類管理 <span class="admin-soon-badge">籌備中</span></span>
+                    <span class="nav-link disabled"><i class="bi bi-megaphone me-2"></i>最新消息管理 <span class="admin-soon-badge">籌備中</span></span>
+                    <span class="nav-link disabled"><i class="bi bi-gear me-2"></i>網站資訊管理 <span class="admin-soon-badge">籌備中</span></span>
+                </nav>
+            </aside>
+
+            <!-- 主內容 -->
+            <main class="col-lg-10 admin-main">
+                <h1>後台首頁</h1>
+
+                <div class="row row-cols-2 row-cols-md-4 g-3 mb-5">
+                    <div class="col">
+                        <div class="stat-card">
+                            <div class="stat-number">8</div>
+                            <div class="stat-label">攝影作品數量</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stat-card">
+                            <div class="stat-number">5</div>
+                            <div class="stat-label">作品分類數量</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stat-card">
+                            <div class="stat-number">7</div>
+                            <div class="stat-label">已公開作品數量</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stat-card">
+                            <div class="stat-number">1</div>
+                            <div class="stat-label">草稿作品數量</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h5 mb-0">最近新增的攝影作品</h2>
+                    <a href="photos/index.html" class="btn btn-outline-dark btn-sm">查看全部作品</a>
+                </div>
+
+                <div class="admin-table-wrap">
+                    <div class="table-responsive">
+                        <table class="table admin-table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>縮圖</th>
+                                    <th>作品名稱</th>
+                                    <th>分類</th>
+                                    <th>狀態</th>
+                                    <th>建立日期</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><img src="../../images/gallery-culture/culture003.jpg" class="admin-thumb" alt="市集紀錄"></td>
+                                    <td>市集紀錄</td>
+                                    <td>活動攝影</td>
+                                    <td><span class="badge text-bg-secondary">草稿</span></td>
+                                    <td>2026-05-20</td>
+                                </tr>
+                                <tr>
+                                    <td><img src="../../images/gallery-flora/flora001.jpg" class="admin-thumb" alt="靜物花語"></td>
+                                    <td>靜物花語</td>
+                                    <td>生活紀實</td>
+                                    <td><span class="badge text-bg-dark">已公開</span></td>
+                                    <td>2026-05-01</td>
+                                </tr>
+                                <tr>
+                                    <td><img src="../../images/gallery-culture/culture002.jpg" class="admin-thumb" alt="老街光影"></td>
+                                    <td>老街光影</td>
+                                    <td>城市紀錄</td>
+                                    <td><span class="badge text-bg-dark">已公開</span></td>
+                                    <td>2026-04-22</td>
+                                </tr>
+                                <tr>
+                                    <td><img src="../../images/gallery-insects/insects001.jpg" class="admin-thumb" alt="微觀世界"></td>
+                                    <td>微觀世界</td>
+                                    <td>自然風景</td>
+                                    <td><span class="badge text-bg-dark">已公開</span></td>
+                                    <td>2026-04-05</td>
+                                </tr>
+                                <tr>
+                                    <td><img src="../../images/gallery-culture/culture001.jpg" class="admin-thumb" alt="巷弄裡的身影"></td>
+                                    <td>巷弄裡的身影</td>
+                                    <td>人物攝影</td>
+                                    <td><span class="badge text-bg-dark">已公開</span></td>
+                                    <td>2026-03-28</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

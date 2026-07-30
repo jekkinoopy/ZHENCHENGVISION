@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>視野成珍 ZHEN CHENG VISION | 全站地圖 (Sitemap)</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="視野成珍全站導覽與內部架構地圖。">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .sitemap-hero {
+            background: linear-gradient(135deg, #1A1A1A 0%, #205072 100%);
+            color: #ffffff;
+            padding: 60px 20px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 3px solid #c5a059;
+        }
+
+        .sitemap-hero h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            margin-bottom: 12px;
+        }
+
+        .sitemap-hero p {
+            font-size: 1rem;
+            color: #d1d5db;
+            letter-spacing: 1px;
+            max-width: 650px;
+            margin: 0 auto 20px;
+        }
+
+        .sitemap-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(197, 160, 89, 0.2);
+            color: #e6c88b;
+            border: 1px solid rgba(197, 160, 89, 0.4);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+        }
+
+        .sitemap-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .sitemap-search-box {
+            margin-bottom: 35px;
+            position: relative;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .sitemap-search-box input {
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            border-radius: 30px;
+            border: 1px solid #ddd;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            transition: var(--transition);
+        }
+
+        .sitemap-search-box input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 4px 20px rgba(32, 80, 114, 0.15);
+        }
+
+        .sitemap-search-box i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .sitemap-section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eef2f5;
+        }
+
+        .sitemap-section-title i {
+            color: var(--accent);
+        }
+
+        .sitemap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 22px;
+        }
+
+        .sitemap-card {
+            background: #ffffff;
+            border: 1px solid #e8ecef;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sitemap-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(32, 80, 114, 0.12);
+            border-color: var(--accent);
+        }
+
+        .sitemap-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .sitemap-card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0;
+        }
+
+        .sitemap-card-tag {
+            font-size: 0.72rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .tag-public {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .tag-admin {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .tag-asset {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .sitemap-card-desc {
+            font-size: 0.88rem;
+            color: #666;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .sitemap-sublinks {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
+            border-top: 1px dashed #eee;
+            padding-top: 10px;
+        }
+
+        .sitemap-sublinks li {
+            margin-bottom: 6px;
+        }
+
+        .sitemap-sublinks a {
+            color: var(--accent);
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .sitemap-sublinks a:hover {
+            color: #c5a059;
+            text-decoration: underline;
+        }
+
+        .sitemap-card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .sitemap-btn {
+            flex: 1;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .sitemap-btn-primary {
+            background: var(--accent);
+            color: #ffffff !important;
+        }
+
+        .sitemap-btn-primary:hover {
+            background: #173d57;
+            color: #ffffff !important;
+        }
+
+        .sitemap-btn-outline {
+            background: #f8f9fa;
+            color: #495057;
+            border: 1px solid #ced4da;
+        }
+
+        .sitemap-btn-outline:hover {
+            background: #e9ecef;
+            color: #212529;
+        }
+
+        .shortcut-tip {
+            background: #f4f6f8;
+            border-left: 4px solid var(--accent);
+            padding: 14px 20px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .shortcut-key {
+            background: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-family: monospace;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <script src="nav-loader.js"></script>
+    <nav>
+        <div class="logo"><a href="index.html"><img src="images/ZHENCHENGVISION.svg" alt="視野成珍 Logo"></a></div>
+        <ul class="nav-list">
+            <li><a href="bird-gallery.html#bird-gallery">羽翼視界</a></li>
+            <li class="nav-dropdown">
+                <a href="wanxiang-gallery.html">萬象足跡</a>
+                <ul class="nav-dropdown-menu" aria-label="萬象足跡分類">
+                    <li><a href="wanxiang-gallery.html#culture">文化影像</a></li>
+                    <li><a href="wanxiang-gallery.html#insects">昆蟲生態</a></li>
+                    <li><a href="wanxiang-gallery.html#landscapes">地景風光</a></li>
+                    <li><a href="wanxiang-gallery.html#flora">植物生態</a></li>
+                </ul>
+            </li>
+            <li>
+                <span class="nav-item-disabled" title="頁面籌備中，暫未開放" aria-disabled="true">榮耀印記 <span
+                        class="nav-soon-badge" aria-hidden="true">準備中</span></span>
+            </li>
+            <li><a href="about.html">關於成珍</a></li>
+        </ul>
+    </nav>
+
+    <header class="sitemap-hero">
+        <span class="sitemap-badge"><i class="fa-solid fa-lock"></i> 業主專屬全站總覽</span>
+        <h1>視野成珍 網站地圖 (Sitemap)</h1>
+        <p>快速檢視與存取網站前台展示頁面、主題錨點分區、作業後台管理系統及靜態資源清單。</p>
+    </header>
+
+    <main class="sitemap-container">
+        <div class="shortcut-tip">
+            <span><i class="fa-solid fa-key text-warning me-2"></i> <strong>提示：</strong> 您可在本站任何頁面按下快捷鍵呼叫網站地圖。</span>
+            <span><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">Shift</span> + <span class="shortcut-key">S</span></span>
+        </div>
+
+        <div class="sitemap-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="sitemapFilter" placeholder="輸入關鍵字搜尋頁面（如：羽翼、文化、後台、新增相片...）" onkeyup="filterCards()">
+        </div>
+
+        <!-- 1. 前台藝廊展覽頁面 -->
+        <h2 class="sitemap-section-title"><i class="fa-solid fa-compass"></i> 前台藝廊展覽區 (Public Pages)</h2>
+        <div class="sitemap-grid">
+            <div class="sitemap-card" data-title="首頁 index 精選專題 輪播故事">
+                <div>
+                    <div class="sitemap-card-header">
+                        <h3 class="sitemap-card-title">首頁 (Home)</h3>
+                        <span class="sitemap-card-tag tag-public">前台公開</span>
+                    </div>
+                    <p class="sitemap-card-desc">視覺 Hero 輪播區、精選主題卡片導覽與創作者理念摘要。</p>
+                    <ul class="sitemap-sublinks">
+                        <li><a href="index.html#collections"><i class="fa-solid fa-hashtag"></i> #collections 精選專題卡片區</a></li>
+                    </ul>
+                </div>
+                <div class="sitemap-card-actions">
+                    <a href="index.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="sitemap-card" data-title="羽翼視界 鳥類圖鑑 bird-gallery 物種動態馬賽克 攀禽 鳴禽">
+                <div>
+                    <div class="sitemap-card-header">
+                        <h3 class="sitemap-card-title">羽翼視界 (Bird Gallery)</h3>
+                        <span class="sitemap-card-tag tag-public">前台公開</span>
+                    </div>
+                    <p class="sitemap-card-desc">野生鳥類生態典藏圖庫，具備物種動態篩選按鈕與靈活馬賽克 Grid 拼圖。</p>
+                    <ul class="sitemap-sublinks">
+                        <li><a href="bird-gallery.html#bird-gallery"><i class="fa-solid fa-hashtag"></i> #bird-gallery 鳥類圖鑑展區</a></li>
+                    </ul>
+                </div>
+                <div class="sitemap-card-actions">
+                    <a href="bird-gallery.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="sitemap-card" data-title="萬象足跡 wanxiang-gallery 文化影像 昆蟲生態 地景風光 植物生態">
+                <div>
+                    <div class="sitemap-card-header">
+                        <h3 class="sitemap-card-title">萬象足跡 (Wanxiang Gallery)</h3>
+                        <span class="sitemap-card-tag tag-public">前台公開</span>
+                    </div>
+                    <p class="sitemap-card-desc">四大自然與人文主題展覽，包含文化 8 張特定佈局與混排視覺展演。</p>
+                    <ul class="sitemap-sublinks">
+                        <li><a href="wanxiang-gallery.html#culture"><i class="fa-solid fa-hashtag"></i> #culture 文化影像</a></li>
+                        <li><a href="wanxiang-gallery.html#insects"><i class="fa-solid fa-hashtag"></i> #insects 昆蟲生態</a></li>
+                        <li><a href="wanxiang-gallery.html#landscapes"><i class="fa-solid fa-hashtag"></i> #landscapes 地景風光</a></li>
+                        <li><a href="wanxiang-gallery.html#flora"><i class="fa-solid fa-hashtag"></i> #flora 植物生態</a></li>
+                    </ul>
+                </div>
+                <div class="sitemap-card-actions">
+                    <a href="wanxiang-gallery.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="sitemap-card" data-title="關於成珍 about 珍幸福 Koman 攝影理念 雙視角">
+                <div>
+                    <div class="sitemap-card-header">
+                        <h3 class="sitemap-card-title">關於成珍 (About)</h3>
+                        <span class="sitemap-card-tag tag-public">前台公開</span>
+                    </div>
+                    <p class="sitemap-card-desc">認識攝影師「珍幸福 × Koman」的雙創作路線、理念與典藏故事。</p>
+                </div>
+                <div class="sitemap-card-actions">
+                    <a href="about.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 作業與後台管理區 -->
+        <h2 class="sitemap-section-title"><i class="fa-solid fa-user-shield"></i> 作業與後台管理模組 (Admin System)</h2>
+        <div class="sitemap-grid">
+            <div class="sitemap-card" data-title="作業入口 homework index">
+                <div>
+                    <div class="sitemap-card-header">
+                        <h3 class="sitemap-card-title">作業系統首頁 (Homework Index)</h3>
+                        <span class="sitemap-card-tag tag-admin">後台作業</span>
+                    </div>
+                    <p class="sitemap-card-desc">作業展示總覽頁面與後台管理入口連結。</p>
+                </div>
+                <div class="sitemap-card-actions">
+                    <a href="homework/index.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="sitemap-card" data-title="作業後台儀表板 homework admin index">
+                <div>
+                    <div class="sitemap-card-header">
+                        <h3 class="sitemap-card-title">作業後台儀表板 (Admin Panel)</h3>
+                        <span class="sitemap-card-tag tag-admin">後台作業</span>
+                    </div>
+                    <p class="sitemap-card-desc">相片管理後台主控台，整合作品新增、修改、刪除與數據檢視功能。</p>
+                </div>
+                <div class="sitemap-card-actions">
+                    <a href="homework/admin/index.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="sitemap-card" data-title="相片管理列表 homework admin photos index CRUD">
+                <div>
+                    <div class="sitemap-card-header">
+                        <h3 class="sitemap-card-title">相片管理列表 (Photo List)</h3>
+                        <span class="sitemap-card-tag tag-admin">後台作業</span>
+                    </div>
+                    <p class="sitemap-card-desc">檢視後台所有相片資料表，提供編輯與刪除快捷按鈕。</p>
+                </div>
+                <div class="sitemap-card-actions">
+                    <a href="homework/admin/photos/index.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="sitemap-card" data-title="新增相片 homework admin photos create 表單">
+                <div>
+                    <div class="sitemap-card-header">
+                        <h3 class="sitemap-card-title">新增相片 (Create Photo)</h3>
+                        <span class="sitemap-card-tag tag-admin">後台作業</span>
+                    </div>
+                    <p class="sitemap-card-desc">填寫新增相片表單，上傳作品並設定分類與說明資訊。</p>
+                </div>
+                <div class="sitemap-card-actions">
+                    <a href="homework/admin/photos/create.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="sitemap-card" data-title="編輯相片 homework admin photos edit 修改">
+                <div>
+                    <div class="sitemap-card-header">
+                        <h3 class="sitemap-card-title">編輯相片 (Edit Photo)</h3>
+                        <span class="sitemap-card-tag tag-admin">後台作業</span>
+                    </div>
+                    <p class="sitemap-card-desc">調整特定相片的描述、題名與標籤分類設定。</p>
+                </div>
+                <div class="sitemap-card-actions">
+                    <a href="homework/admin/photos/edit.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="sitemap-card" data-title="刪除相片 homework admin photos delete 處置">
+                <div>
+                    <div class="sitemap-card-header">
+                        <h3 class="sitemap-card-title">刪除相片處置 (Delete Photo)</h3>
+                        <span class="sitemap-card-tag tag-admin">後台作業</span>
+                    </div>
+                    <p class="sitemap-card-desc">安全確認與處置刪除指定相片記錄。</p>
+                </div>
+                <div class="sitemap-card-actions">
+                    <a href="homework/admin/photos/delete.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 系統核心與 Manifest 資料檔 -->
+        <h2 class="sitemap-section-title"><i class="fa-solid fa-database"></i> 靜態資源與 Manifest 清單 (Assets & Data)</h2>
+        <div class="sitemap-grid">
+            <div class="sitemap-card" data-title="gallery-manifest.json 萬象 羽翼 圖庫清單">
+                <div>
+                    <div class="sitemap-card-header">
+                        <h3 class="sitemap-card-title">gallery-manifest.json</h3>
+                        <span class="sitemap-card-tag tag-asset">資料清單</span>
+                    </div>
+                    <p class="sitemap-card-desc">全站萬象與羽翼圖庫的核心動態圖片載入清單。</p>
+                </div>
+                <div class="sitemap-card-actions">
+                    <a href="gallery-manifest.json" target="_blank" class="sitemap-btn sitemap-btn-outline">檢視 JSON <i class="fa-solid fa-external-link"></i></a>
+                </div>
+            </div>
+
+            <div class="sitemap-card" data-title="bird-manifest.json 備援鳥類清單">
+                <div>
+                    <div class="sitemap-card-header">
+                        <h3 class="sitemap-card-title">bird-manifest.json</h3>
+                        <span class="sitemap-card-tag tag-asset">備援清單</span>
+                    </div>
+                    <p class="sitemap-card-desc">羽翼鳥類圖鑑離線/備援載入清單檔。</p>
+                </div>
+                <div class="sitemap-card-actions">
+                    <a href="bird-manifest.json" target="_blank" class="sitemap-btn sitemap-btn-outline">檢視 JSON <i class="fa-solid fa-external-link"></i></a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">ZHEN CHENG VISION</div>
+            <p class="slogan">捕捉真實瞬間，定格永恆價值。</p>
+            <hr class="footer-divider">
+            <div class="footer-bottom">
+                <a href="https://jekkinoopy.github.io/Portfolio/" class="studio-link" target="_blank">Design by
+                    <strong>Jekkinoopy Studio</strong></a>
+                <div class="copyright">&copy; 2026 視野成珍. 版權所有。 <a href="sitemap.html" title="網站地圖 (業主專屬)" style="color: #666; font-size: 0.8rem; margin-left: 8px;"><i class="fa-solid fa-lock"></i></a></div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function filterCards() {
+            const query = document.getElementById('sitemapFilter').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.sitemap-card');
+            
+            cards.forEach(card => {
+                const title = card.getAttribute('data-title').toLowerCase();
+                const content = card.innerText.toLowerCase();
+                if (title.includes(query) || content.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

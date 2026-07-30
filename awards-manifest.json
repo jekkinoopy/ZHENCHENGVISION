@@ -1,0 +1,19 @@
+{
+    "_說明": "新增獲獎紀錄時，只要在對應作者的 awards 陣列裡新增一筆物件即可，不需要修改 honors.html。work 沒有作品名稱時可省略或填 null。",
+    "authors": [
+        {
+            "name": "柯志成",
+            "awards": [
+                { "year": 2019, "competition": "桃城映像攝影比賽", "work": null, "tier": "優勝獎" },
+                { "year": 2019, "competition": "桃城映像攝影比賽", "work": null, "tier": "入選獎" }
+            ]
+        },
+        {
+            "name": "林麗珍",
+            "awards": [
+                { "year": 2024, "competition": "桃城映像攝影比賽", "work": "倒影之美", "tier": "佳作獎" },
+                { "year": 2024, "competition": "桃城映像攝影比賽", "work": "雨後的展演中心", "tier": "優勝獎" }
+            ]
+        }
+    ]
+}

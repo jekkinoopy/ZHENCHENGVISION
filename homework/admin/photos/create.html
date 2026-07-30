@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新增攝影作品 | 珍成視界 Admin</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+
+<body>
+
+    <!-- 後台導覽列 -->
+    <nav class="navbar navbar-expand-lg admin-navbar navbar-dark">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="../index.html">珍成視界 Admin</a>
+            <div class="d-flex align-items-center gap-2">
+                <a href="../../index.html" class="nav-link d-inline-flex align-items-center gap-1">
+                    <i class="bi bi-box-arrow-up-left"></i> 回前台
+                </a>
+                <a href="../../index.html" class="btn btn-outline-light btn-sm ms-2">
+                    <i class="bi bi-box-arrow-right"></i> 登出
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid admin-shell">
+        <div class="row">
+
+            <!-- 側邊選單 -->
+            <aside class="col-lg-2 admin-sidebar">
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="../index.html"><i class="bi bi-speedometer2 me-2"></i>後台首頁</a>
+                    <a class="nav-link active" href="index.html"><i class="bi bi-images me-2"></i>攝影作品管理</a>
+                    <a class="nav-link" href="../honors/index.html"><i class="bi bi-trophy me-2"></i>獎項管理</a>
+                    <span class="nav-link disabled"><i class="bi bi-tags me-2"></i>作品分類管理 <span class="admin-soon-badge">籌備中</span></span>
+                    <span class="nav-link disabled"><i class="bi bi-megaphone me-2"></i>最新消息管理 <span class="admin-soon-badge">籌備中</span></span>
+                    <span class="nav-link disabled"><i class="bi bi-gear me-2"></i>網站資訊管理 <span class="admin-soon-badge">籌備中</span></span>
+                </nav>
+            </aside>
+
+            <!-- 主內容 -->
+            <main class="col-lg-10 admin-main">
+                <h1>新增攝影作品</h1>
+
+                <div class="admin-form-card">
+                    <form action="index.html" method="get">
+                        <div class="mb-3">
+                            <label for="photoName" class="form-label">作品名稱</label>
+                            <input type="text" class="form-control" id="photoName" name="photoName" placeholder="請輸入作品名稱" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="photoCategory" class="form-label">作品分類</label>
+                            <select class="form-select" id="photoCategory" name="photoCategory" required>
+                                <option value="" selected disabled>請選擇分類</option>
+                                <option value="natural">自然風景</option>
+                                <option value="city">城市紀錄</option>
+                                <option value="portrait">人物攝影</option>
+                                <option value="life">生活紀實</option>
+                                <option value="event">活動攝影</option>
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="photoLocation" class="form-label">拍攝地點</label>
+                                <input type="text" class="form-control" id="photoLocation" name="photoLocation" placeholder="例如：南投 溪頭">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="photoDate" class="form-label">拍攝日期</label>
+                                <input type="date" class="form-control" id="photoDate" name="photoDate">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="photoFile" class="form-label">攝影作品圖片</label>
+                            <input type="file" class="form-control" id="photoFile" name="photoFile" accept="image/*">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="photoDesc" class="form-label">作品介紹</label>
+                            <textarea class="form-control" id="photoDesc" name="photoDesc" rows="5" placeholder="請描述這件作品的故事、拍攝背景或想傳達的意念"></textarea>
+                        </div>
+
+                        <div class="form-check form-switch mb-4">
+                            <input class="form-check-input" type="checkbox" role="switch" id="photoPublic" name="photoPublic" checked>
+                            <label class="form-check-label" for="photoPublic">是否公開顯示於前台</label>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-dark px-4">儲存作品</button>
+                            <a href="index.html" class="btn btn-outline-secondary px-4">取消並返回列表</a>
+                        </div>
+                    </form>
+                </div>
+            </main>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
