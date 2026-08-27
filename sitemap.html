@@ -370,84 +370,32 @@
             </div>
         </div>
 
-        <!-- 2. 作業與後台管理區 -->
-        <h2 class="sitemap-section-title"><i class="fa-solid fa-user-shield"></i> 作業與後台管理模組 (Admin System)</h2>
+        <!-- 2. 後台管理區 -->
+        <h2 class="sitemap-section-title"><i class="fa-solid fa-user-shield"></i> 後台管理系統 (Admin System)</h2>
         <div class="sitemap-grid">
-            <div class="sitemap-card" data-title="作業入口 homework index">
+            <div class="sitemap-card" data-title="後台登入 admin login PHP MySQL">
                 <div>
                     <div class="sitemap-card-header">
-                        <h3 class="sitemap-card-title">作業系統首頁 (Homework Index)</h3>
-                        <span class="sitemap-card-tag tag-admin">後台作業</span>
+                        <h3 class="sitemap-card-title">後台登入 (Admin Login)</h3>
+                        <span class="sitemap-card-tag tag-admin">PHP + MySQL</span>
                     </div>
-                    <p class="sitemap-card-desc">作業展示總覽頁面與後台管理入口連結。</p>
+                    <p class="sitemap-card-desc">Session 驗證登入後，可管理圖庫作品（五大分類）、最新消息與後台帳號。需先啟動 MySQL 並匯入 admin/sql/schema.sql，詳見 admin/README.md。</p>
                 </div>
                 <div class="sitemap-card-actions">
-                    <a href="homework/index.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="admin/login.php" class="sitemap-btn sitemap-btn-primary">前往登入 <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
 
-            <div class="sitemap-card" data-title="作業後台儀表板 homework admin index">
+            <div class="sitemap-card" data-title="最新消息 news 前台頁面">
                 <div>
                     <div class="sitemap-card-header">
-                        <h3 class="sitemap-card-title">作業後台儀表板 (Admin Panel)</h3>
-                        <span class="sitemap-card-tag tag-admin">後台作業</span>
+                        <h3 class="sitemap-card-title">最新消息 (News)</h3>
+                        <span class="sitemap-card-tag tag-asset">前台頁面</span>
                     </div>
-                    <p class="sitemap-card-desc">相片管理後台主控台，整合作品新增、修改、刪除與數據檢視功能。</p>
+                    <p class="sitemap-card-desc">讀取後台匯出的 news.json，顯示已發布的公告與消息。</p>
                 </div>
                 <div class="sitemap-card-actions">
-                    <a href="homework/admin/index.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            <div class="sitemap-card" data-title="相片管理列表 homework admin photos index CRUD">
-                <div>
-                    <div class="sitemap-card-header">
-                        <h3 class="sitemap-card-title">相片管理列表 (Photo List)</h3>
-                        <span class="sitemap-card-tag tag-admin">後台作業</span>
-                    </div>
-                    <p class="sitemap-card-desc">檢視後台所有相片資料表，提供編輯與刪除快捷按鈕。</p>
-                </div>
-                <div class="sitemap-card-actions">
-                    <a href="homework/admin/photos/index.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            <div class="sitemap-card" data-title="新增相片 homework admin photos create 表單">
-                <div>
-                    <div class="sitemap-card-header">
-                        <h3 class="sitemap-card-title">新增相片 (Create Photo)</h3>
-                        <span class="sitemap-card-tag tag-admin">後台作業</span>
-                    </div>
-                    <p class="sitemap-card-desc">填寫新增相片表單，上傳作品並設定分類與說明資訊。</p>
-                </div>
-                <div class="sitemap-card-actions">
-                    <a href="homework/admin/photos/create.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            <div class="sitemap-card" data-title="編輯相片 homework admin photos edit 修改">
-                <div>
-                    <div class="sitemap-card-header">
-                        <h3 class="sitemap-card-title">編輯相片 (Edit Photo)</h3>
-                        <span class="sitemap-card-tag tag-admin">後台作業</span>
-                    </div>
-                    <p class="sitemap-card-desc">調整特定相片的描述、題名與標籤分類設定。</p>
-                </div>
-                <div class="sitemap-card-actions">
-                    <a href="homework/admin/photos/edit.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            <div class="sitemap-card" data-title="刪除相片 homework admin photos delete 處置">
-                <div>
-                    <div class="sitemap-card-header">
-                        <h3 class="sitemap-card-title">刪除相片處置 (Delete Photo)</h3>
-                        <span class="sitemap-card-tag tag-admin">後台作業</span>
-                    </div>
-                    <p class="sitemap-card-desc">安全確認與處置刪除指定相片記錄。</p>
-                </div>
-                <div class="sitemap-card-actions">
-                    <a href="homework/admin/photos/delete.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="news.html" class="sitemap-btn sitemap-btn-primary">前往頁面 <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
