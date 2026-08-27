@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最新消息 | ZHEN CHENG VISION</title>
+    <meta name="description" content="視野成珍最新消息與公告。">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .news-shell { max-width: 800px; margin: 0 auto; padding: 60px 20px 100px; }
+        .news-heading { text-align: center; margin-bottom: 48px; }
+        .news-heading h1 { font-size: 28px; letter-spacing: 4px; }
+        .news-list { display: flex; flex-direction: column; gap: 32px; }
+        .news-item { border-bottom: 1px solid #eee; padding-bottom: 32px; }
+        .news-item img { width: 100%; max-height: 360px; object-fit: cover; border-radius: 8px; margin-bottom: 16px; }
+        .news-item h2 { font-size: 20px; margin-bottom: 8px; }
+        .news-date { color: var(--text-muted); font-size: 13px; margin-bottom: 12px; }
+        .news-content { white-space: pre-line; line-height: 1.8; color: var(--text-main); }
+        .news-empty { text-align: center; color: var(--text-muted); padding: 60px 0; }
+    </style>
+</head>
+
+<body>
+    <script src="nav-loader.js"></script>
+    <nav>
+        <div class="logo"><a href="index.html"><img src="images/ZHENCHENGVISION.svg" alt="視野成珍 Logo"></a></div>
+        <ul class="nav-list">
+            <li><a href="bird-gallery.html#bird-gallery">羽翼視界</a></li>
+            <li class="nav-dropdown">
+                <a href="wanxiang-gallery.html">萬象足跡</a>
+                <ul class="nav-dropdown-menu" aria-label="萬象足跡分類">
+                    <li><a href="wanxiang-gallery.html#culture">文化影像</a></li>
+                    <li><a href="wanxiang-gallery.html#insects">昆蟲生態</a></li>
+                    <li><a href="wanxiang-gallery.html#landscapes">地景風光</a></li>
+                    <li><a href="wanxiang-gallery.html#flora">植物生態</a></li>
+                </ul>
+            </li>
+            <li>
+                <span class="nav-item-disabled" title="頁面籌備中，暫未開放" aria-disabled="true">榮耀印記 <span class="nav-soon-badge" aria-hidden="true">準備中</span></span>
+            </li>
+            <li><a href="news.html" aria-current="page">最新消息</a></li>
+            <li><a href="about.html">關於成珍</a></li>
+        </ul>
+    </nav>
+
+    <main class="news-shell">
+        <section class="news-heading">
+            <span class="line"></span>
+            <h1>最新消息</h1>
+            <span class="line"></span>
+        </section>
+        <div id="newsList" class="news-list"></div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">ZHEN CHENG VISION</div>
+            <p class="slogan">捕捉真實瞬間，定格永恆價值。</p>
+            <hr class="footer-divider">
+            <div class="footer-bottom">
+                <a href="https://jekkinoopy.github.io/Portfolio/" class="studio-link" target="_blank">Design by
+                    <strong>Jekkinoopy Studio</strong></a>
+                <div class="copyright">&copy; 2026 視野成珍. 版權所有。</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function escapeHtml(s) {
+            return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        function formatDate(raw) {
+            if (!raw) return "";
+            const d = new Date(String(raw).replace(" ", "T"));
+            if (isNaN(d.getTime())) return raw;
+            return d.toLocaleDateString("zh-TW", { year: "numeric", month: "long", day: "numeric" });
+        }
+
+        async function bootstrap() {
+            const mount = document.getElementById("newsList");
+            let items = [];
+            try {
+                const res = await fetch("./news.json", { cache: "no-store" });
+                if (res.ok) items = await res.json();
+            } catch {
+                items = [];
+            }
+
+            if (!Array.isArray(items) || items.length === 0) {
+                mount.innerHTML = '<p class="news-empty">目前尚無最新消息，敬請期待。</p>';
+                return;
+            }
+
+            mount.innerHTML = items.map((item) => {
+                const cover = item.cover_image
+                    ? `<img src="images/news/${escapeHtml(item.cover_image)}" alt="${escapeHtml(item.title)}">`
+                    : "";
+                return `
+                    <article class="news-item">
+                        ${cover}
+                        <h2>${escapeHtml(item.title)}</h2>
+                        <div class="news-date">${escapeHtml(formatDate(item.published_at))}</div>
+                        <div class="news-content">${escapeHtml(item.content)}</div>
+                    </article>
+                `;
+            }).join("");
+        }
+
+        bootstrap();
+    </script>
+</body>
+
+</html>

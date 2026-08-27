@@ -1,0 +1,154 @@
+:root {
+    --primary-dark: #1A1A1A;
+    --bg-light: #F5F5F5;
+    --text-main: #333333;
+    --text-muted: #8E8E8E;
+    --accent: #205072;
+    --accent-soft: #e8eef2;
+    --danger: #b3261e;
+    --success: #1e6b3a;
+    --radius: 8px;
+    --border: #e2e2e2;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    background: var(--bg-light);
+    color: var(--text-main);
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.admin-shell { display: flex; min-height: 100vh; }
+
+.admin-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--primary-dark);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+}
+
+.admin-brand {
+    font-size: 18px;
+    font-weight: 700;
+    padding: 0 20px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    margin-bottom: 12px;
+}
+.admin-brand span { display: block; font-size: 12px; font-weight: 400; color: #bbb; margin-top: 4px; }
+
+.admin-nav { display: flex; flex-direction: column; flex: 1; }
+.admin-nav a {
+    color: #ddd;
+    padding: 12px 20px;
+    font-size: 14px;
+}
+.admin-nav a:hover, .admin-nav a.active { background: rgba(255,255,255,.08); color: #fff; text-decoration: none; }
+
+.admin-user-box {
+    padding: 16px 20px 0;
+    border-top: 1px solid rgba(255,255,255,.12);
+    font-size: 13px;
+}
+.admin-user-name { font-weight: 600; }
+.admin-user-role { color: #aaa; margin-bottom: 10px; }
+.admin-link-btn {
+    background: none; border: 1px solid rgba(255,255,255,.3); color: #eee;
+    padding: 6px 12px; border-radius: var(--radius); cursor: pointer; font-size: 13px;
+}
+.admin-link-btn:hover { background: rgba(255,255,255,.1); }
+
+.admin-main { flex: 1; padding: 32px 40px; max-width: 1100px; }
+
+.admin-flash { padding: 12px 16px; border-radius: var(--radius); margin-bottom: 20px; font-size: 14px; }
+.admin-flash--success { background: #e6f4ea; color: var(--success); border: 1px solid #b9e0c4; }
+.admin-flash--error { background: #fbe9e7; color: var(--danger); border: 1px solid #f0c4bf; }
+
+h1 { font-size: 22px; margin: 0 0 6px; }
+h2 { font-size: 17px; margin: 0 0 16px; }
+.admin-subtitle { color: var(--text-muted); margin-bottom: 24px; font-size: 14px; }
+
+.admin-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.admin-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.admin-stat-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+.admin-stat-card .num { font-size: 26px; font-weight: 700; color: var(--accent); }
+.admin-stat-card .label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+.admin-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
+
+.admin-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.admin-tab {
+    padding: 8px 16px; border-radius: 999px; border: 1px solid var(--border);
+    background: #fff; color: var(--text-main); font-size: 13px; cursor: pointer;
+}
+.admin-tab.active, .admin-tab:hover { background: var(--accent); color: #fff; border-color: var(--accent); text-decoration: none; }
+
+.btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 9px 18px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    cursor: pointer;
+}
+.btn:hover { background: #17405c; text-decoration: none; color: #fff; }
+.btn-secondary { background: #fff; color: var(--text-main); border: 1px solid var(--border); }
+.btn-secondary:hover { background: #f0f0f0; color: var(--text-main); }
+.btn-danger { background: var(--danger); }
+.btn-danger:hover { background: #8f1f19; }
+.btn-small { padding: 5px 10px; font-size: 12px; }
+
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
+th { color: var(--text-muted); font-weight: 600; font-size: 13px; }
+tr:last-child td { border-bottom: none; }
+
+.thumb { width: 64px; height: 64px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); display: block; }
+
+.admin-form { display: flex; flex-direction: column; gap: 16px; max-width: 560px; }
+.admin-form label { font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block; }
+.admin-form input[type=text], .admin-form input[type=password], .admin-form input[type=number],
+.admin-form input[type=datetime-local], .admin-form select, .admin-form textarea {
+    width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius);
+    font-size: 14px; font-family: inherit;
+}
+.admin-form textarea { min-height: 160px; resize: vertical; }
+.admin-form .field-hint { color: var(--text-muted); font-size: 12px; margin-top: 4px; }
+.admin-form .field-error { color: var(--danger); font-size: 12px; margin-top: 4px; }
+.admin-form .actions { display: flex; gap: 10px; margin-top: 8px; }
+
+.inline-form { display: inline; }
+
+.badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; }
+.badge-published { background: #e6f4ea; color: var(--success); }
+.badge-draft { background: #f0f0f0; color: var(--text-muted); }
+.badge-admin { background: var(--accent-soft); color: var(--accent); }
+.badge-editor { background: #f0f0f0; color: var(--text-muted); }
+
+.empty-state { color: var(--text-muted); padding: 40px 0; text-align: center; }
+
+.login-shell {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-light);
+}
+.login-box {
+    background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 40px; width: 100%; max-width: 360px;
+}
+.login-box h1 { text-align: center; margin-bottom: 4px; }
+.login-box .admin-subtitle { text-align: center; }
