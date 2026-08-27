@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="zh-Hant">
 
@@ -112,9 +112,9 @@
 
             <div class="slot slot-5 row-2-right-bottom"></div>
 
-            <div class="slot slot-6 row-3-left"></div>
+            <div class="slot slot-6 row-3-right-compact"></div>
 
-            <div class="slot slot-7 row-3-right"></div>
+            <div class="slot slot-7 row-3-left-feature"></div>
 
         </div>
 
@@ -145,10 +145,8 @@
 
     <template id="galleryLayoutTplMix1h1v">
         <div class="layout-mix layout-mix--1h1v">
-            <div class="slot layout-mix-landscape">
-                <div class="layout-gallery-cover-frame"></div>
-            </div>
             <div class="slot layout-mix-portrait slot-photo-portrait"></div>
+            <div class="slot layout-mix-landscape"></div>
         </div>
     </template>
 
@@ -210,8 +208,26 @@
 
         const FALLBACK_MANIFEST = {
 
-            /* 上線前暫停翠鳥：還原請加回翠鳥 *.jpg 並解開下方 SPECIES_TO_GROUP 的 翠鳥 */
-            "gallery-birds": ["五色鳥001.jpg", "五色鳥002.jpg", "五色鳥003.jpg", "環頸雉001.jpg", "環頸雉002.jpg", "黑枕藍鶲001.jpg"],
+            "gallery-birds": [
+                "五色鳥001.jpg",
+                "五色鳥002.jpg",
+                "五色鳥003.jpg",
+                "環頸雉001.jpg",
+                "環頸雉002.jpg",
+                "環頸雉003.jpg",
+                "黑枕藍鶲001.jpg",
+                "黑枕藍鶲002.jpg",
+                "黑枕藍鶲003.jpg",
+                "翠鳥001.jpg",
+                "翠鳥002.jpg",
+                "翠鳥003.jpg",
+                "翠鳥004.jpg",
+                "翠鳥005.jpg",
+                "翠鳥006.jpg",
+                "翠鳥007.jpg",
+                "翠鳥008.jpg",
+                "翠鳥009.jpg"
+            ],
 
         };
 
@@ -226,7 +242,7 @@
             台灣擬啄木: "攀禽類",
             啄木鳥: "攀禽類",
             小啄木: "攀禽類",
-            // 翠鳥: "攀禽類", // 與清單一併暫停：還原翠鳥圖时请取消此行註解
+            翠鳥: "攀禽類",
             斑魚狗: "攀禽類",
             環頸雉: "雞雉類",
             竹雞: "雞雉類",
@@ -562,6 +578,18 @@
 
     </script>
 
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">ZHEN CHENG VISION</div>
+            <p class="slogan">捕捉真實瞬間，定格永恆價值。</p>
+            <hr class="footer-divider">
+            <div class="footer-bottom">
+                <a href="https://jekkinoopy.github.io/Portfolio/" class="studio-link" target="_blank">Design by
+                    <strong>Jekkinoopy Studio</strong></a>
+                <div class="copyright">&copy; 2026 視野成珍. 版權所有。 <a href="sitemap.html" title="網站地圖 (業主專屬)" style="color: inherit; text-decoration: none; opacity: 0.35; margin-left: 6px;"><i class="fa-solid fa-lock" style="font-size: 0.75rem;"></i></a></div>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

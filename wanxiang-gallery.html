@@ -92,7 +92,7 @@
 
 
         <!-- data-four-layout="one-plus-three" ：四張時為「上一大三小」；預設不寫則為 2×2 -->
-        <div id="wanxiangGalleryMount" class="wanxiang-gallery-mount"></div>
+        <div id="wanxiangGalleryMount" class="wanxiang-gallery-mount" data-four-layout="one-plus-three"></div>
 
     </main>
 
@@ -112,9 +112,9 @@
 
             <div class="slot slot-5 row-2-right-bottom"></div>
 
-            <div class="slot slot-6 row-3-left"></div>
+            <div class="slot slot-6 row-3-right-compact"></div>
 
-            <div class="slot slot-7 row-3-right"></div>
+            <div class="slot slot-7 row-3-left-feature"></div>
 
         </div>
 
@@ -140,8 +140,8 @@
 
     <template id="galleryLayoutTplMix1h1v">
         <div class="layout-mix layout-mix--1h1v">
-            <div class="slot layout-mix-landscape"><div class="layout-gallery-cover-frame"></div></div>
             <div class="slot layout-mix-portrait slot-photo-portrait"></div>
+            <div class="slot layout-mix-landscape"></div>
         </div>
     </template>
 
@@ -150,6 +150,30 @@
             <div class="slot layout-mix-portrait-col"></div>
             <div class="slot layout-mix-landscape layout-mix-h1"></div>
             <div class="slot layout-mix-landscape layout-mix-h2"></div>
+        </div>
+    </template>
+
+    <!-- 文化影像 8 張固定：2v → (2v+1h) → (1v+2v) -->
+    <template id="galleryCultureTpl2v">
+        <div class="layout-culture-block layout-culture--2v">
+            <div class="slot culture-slot culture-2v-a"></div>
+            <div class="slot culture-slot culture-2v-b"></div>
+        </div>
+    </template>
+
+    <template id="galleryCultureTpl2v1h">
+        <div class="layout-culture-block layout-culture--2v1h">
+            <div class="slot culture-slot culture-2v1h-p culture-2v1h-p1"></div>
+            <div class="slot culture-slot culture-2v1h-p culture-2v1h-p2"></div>
+            <div class="slot culture-slot culture-2v1h-h"></div>
+        </div>
+    </template>
+
+    <template id="galleryCultureTpl1v2v">
+        <div class="layout-culture-block layout-culture--1v2v">
+            <div class="slot culture-slot culture-1v2v-left"></div>
+            <div class="slot culture-slot culture-1v2v-rt culture-1v2v-rt-top"></div>
+            <div class="slot culture-slot culture-1v2v-rt culture-1v2v-rt-bot"></div>
         </div>
     </template>
 
@@ -261,7 +285,19 @@
 
             } else {
 
-                GalleryMosaic.renderGallery(mount, folder, records);
+                GalleryMosaic.renderGallery(mount, folder, records, undefined, {
+
+                    mosaicMin: 7,
+
+                    /* 張數適用時優先拆成多段不重複版型；拆不開時仍會走單區馬賽克（ mosaicMin 之上） */
+
+                    composeUniqueLayouts: true,
+
+                    composeMinCount: 5,
+
+                    composeMaxCount: 48,
+
+                });
 
             }
 
@@ -347,6 +383,18 @@
 
     </script>
 
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">ZHEN CHENG VISION</div>
+            <p class="slogan">捕捉真實瞬間，定格永恆價值。</p>
+            <hr class="footer-divider">
+            <div class="footer-bottom">
+                <a href="https://jekkinoopy.github.io/Portfolio/" class="studio-link" target="_blank">Design by
+                    <strong>Jekkinoopy Studio</strong></a>
+                <div class="copyright">&copy; 2026 視野成珍. 版權所有。 <a href="sitemap.html" title="網站地圖 (業主專屬)" style="color: inherit; text-decoration: none; opacity: 0.35; margin-left: 6px;"><i class="fa-solid fa-lock" style="font-size: 0.75rem;"></i></a></div>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

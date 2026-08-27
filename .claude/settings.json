@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(cat /tmp/httpserver.log 2>&1; ps aux | grep http.server | grep -v grep)",
+      "Read(//tmp/**)",
+      "Bash(chromium-cli --help)",
+      "Bash(ls \"/c/Program Files/Google/Chrome/Application/\" 2>&1 | head)",
+      "Read(//c/Program Files/Google/Chrome/Application//**)",
+      "Bash(mkdir -p /tmp/shots)",
+      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --no-sandbox --window-size=1440,900 --screenshot=/tmp/shots/index.png \"file:///d:/Developer/projects/ZHENCHENGVISION/index.html\")",
+      "Read(//c/Users/User/AppData/Local/Temp/shots/**)",
+      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --no-sandbox --window-size=1440,1000 --screenshot=/tmp/shots/index2.png \"file:///d:/Developer/projects/ZHENCHENGVISION/index.html\")",
+      "Bash(rm -f /tmp/httpserver.pid /tmp/httpserver.log)",
+      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --no-sandbox --window-size=1440,900 --screenshot=/tmp/shots/slide1.png \"file:///d:/Developer/projects/ZHENCHENGVISION/index.html\")",
+      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --no-sandbox --window-size=1440,900 --virtual-time-budget=3000 --screenshot=/tmp/shots/slide1b.png \"file:///d:/Developer/projects/ZHENCHENGVISION/index.html\")",
+      "Bash(cp -r d:/Developer/projects/ZHENCHENGVISION/styles.css C:/Users/User/AppData/Local/Temp/claude/d--Developer-projects-ZHENCHENGVISION/bc86aa9c-e6c0-4be2-a12d-846f1d8dc3aa/scratchpad/styles.css)",
+      "Bash(cp -r d:/Developer/projects/ZHENCHENGVISION/images C:/Users/User/AppData/Local/Temp/claude/d--Developer-projects-ZHENCHENGVISION/bc86aa9c-e6c0-4be2-a12d-846f1d8dc3aa/scratchpad/images)",
+      "Bash('/c/Program Files/Google/Chrome/Application/chrome.exe' --headless=new --disable-gpu --no-sandbox --window-size=1440,900 --virtual-time-budget=3000 --screenshot=/tmp/shots/slide2.png file:///C:/Users/User/AppData/Local/Temp/claude/d--Developer-projects-ZHENCHENGVISION/bc86aa9c-e6c0-4be2-a12d-846f1d8dc3aa/scratchpad/index_slide2.html)",
+      "Bash(perl -0pi -e 's/<div class=\"carousel-item active\">\\\\s*<img src=\"images\\\\/gallery-birds\\\\/五色鳥001\\\\.jpg\"/<div class=\"carousel-item\">\\\\n                    <img src=\"images\\\\/gallery-birds\\\\/五色鳥001.jpg\"/; s/<div class=\"carousel-item\">\\\\s*<img src=\"images\\\\/gallery-birds\\\\/翠鳥001\\\\.jpg\"/<div class=\"carousel-item active\">\\\\n                    <img src=\"images\\\\/gallery-birds\\\\/翠鳥001.jpg\"/' C:/Users/User/AppData/Local/Temp/claude/d--Developer-projects-ZHENCHENGVISION/bc86aa9c-e6c0-4be2-a12d-846f1d8dc3aa/scratchpad/index_slide2.html)",
+      "Bash(perl -0pi -e 's/<div class=\"carousel-item active\">\\\\s*<img src=\"images\\\\/gallery-birds\\\\/五色鳥001\\\\.jpg\"/<div class=\"carousel-item\">\\\\n                    <img src=\"images\\\\/gallery-birds\\\\/五色鳥001.jpg\"/; s/<div class=\"carousel-item\">\\\\s*<img src=\"images\\\\/gallery-birds\\\\/黑枕藍鶲001\\\\.jpg\"/<div class=\"carousel-item active\">\\\\n                    <img src=\"images\\\\/gallery-birds\\\\/黑枕藍鶲001.jpg\"/' C:/Users/User/AppData/Local/Temp/claude/d--Developer-projects-ZHENCHENGVISION/bc86aa9c-e6c0-4be2-a12d-846f1d8dc3aa/scratchpad/index_slide3.html)",
+      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --no-sandbox --window-size=1440,900 --virtual-time-budget=3000 --screenshot=/tmp/shots/c_slide1.png \"file:///d:/Developer/projects/ZHENCHENGVISION/index.html\")"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
+    ]
+  }
+}

@@ -194,32 +194,128 @@
        /* 3. 英雄看板區 (Hero Section) */
        .hero {
            height: 100vh;
-           background:
-               linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)),
-               url('images/gallery-birds/LINE_ALBUM_網頁圖片_260504_1.jpg');
-           background-size: cover;
-           background-position: center;
-           display: flex;
-           flex-direction: column;
-           justify-content: center;
-           align-items: center;
+           position: relative;
+           overflow: hidden;
            color: white;
            text-align: center;
        }
 
-       .hero h1 {
+       .hero-carousel,
+       .hero-carousel .carousel-inner,
+       .hero-carousel .carousel-item {
+           height: 100vh;
+       }
+
+       .hero-carousel .carousel-item img {
+           width: 100%;
+           height: 100vh;
+           object-fit: cover;
+       }
+
+       .hero-carousel .carousel-item::after {
+           content: '';
+           position: absolute;
+           inset: 0;
+           background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+       }
+
+       /* 輪播文字說明：三張各自的位置，隨淡入淡出切換 */
+       .hero-caption {
+           position: absolute;
+           left: 50%;
+           z-index: 2;
+           max-width: 90%;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           text-align: center;
+           pointer-events: none;
+       }
+
+       .hero-caption .cta-btn {
+           pointer-events: auto;
+           opacity: 0;
+           transform: translateY(10px);
+       }
+
+       .carousel-item.active .hero-caption .cta-btn {
+           animation: heroCharIn 0.6s ease forwards;
+           animation-delay: 1.1s;
+       }
+
+       /* 1. 左上偏中間 */
+       .hero-caption--pos1 {
+           top: 18%;
+           transform: translateX(-62%);
+       }
+
+       /* 2. 右下 */
+       .hero-caption--pos2 {
+           bottom: 16%;
+           transform: translateX(-38%);
+       }
+
+       /* 3. 左上 */
+       .hero-caption--pos3 {
+           top: 9%;
+           transform: translateX(-62%);
+       }
+
+       .hero-caption-title {
            font-size: 3.5rem;
            letter-spacing: 8px;
            margin-bottom: 10px;
            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
        }
 
-
-
-       .hero p {
+       .hero-caption-sub {
            font-size: 1.2rem;
            letter-spacing: 3px;
            margin-bottom: 30px;
+           text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+       }
+
+       /* 小螢幕收斂位置與字級，避免文字被裁切 */
+       @media (max-width: 900px) {
+           .hero-caption {
+               max-width: 82%;
+           }
+
+           .hero-caption--pos1,
+           .hero-caption--pos2,
+           .hero-caption--pos3 {
+               transform: translateX(-50%);
+           }
+
+           .hero-caption-title {
+               font-size: 2.4rem;
+               letter-spacing: 5px;
+           }
+
+           .hero-caption-sub {
+               font-size: 1rem;
+               letter-spacing: 2px;
+               margin-bottom: 22px;
+           }
+       }
+
+       /* 一個字一個字淡入 */
+       .hero-caption .char {
+           display: inline-block;
+           opacity: 0;
+           transform: translateY(14px);
+       }
+
+       .carousel-item.active .hero-caption .char {
+           animation: heroCharIn 0.55s ease forwards;
+           animation-delay: calc(var(--char-index) * 0.07s);
+       }
+
+       @keyframes heroCharIn {
+           to {
+               opacity: 1;
+               transform: translateY(0);
+           }
        }
 
        .cta-btn {
@@ -458,21 +554,69 @@
            max-width: 100%;
        }
 
-       .about-lead-photo-frame {
+       /* 手機：單張顯示；桌機交由 .about-lead-duo（見文末 media） */
+       .about-lead-photo--mobile-full {
            border-radius: var(--gallery-card-radius, 8px);
            overflow: hidden;
            box-shadow: 0 16px 52px rgba(26, 26, 26, 0.1);
-           aspect-ratio: 16 / 9;
            background: var(--bg-light);
            line-height: 0;
        }
 
-       .about-lead-photo-frame img {
+       .about-lead-photo--mobile-full img {
            width: 100%;
-           height: 100%;
-           object-fit: cover;
-           object-position: center 28%;
+           height: auto;
            display: block;
+       }
+
+       /* 桌機並排裁切同一張合成圖：L/R 為視覺寬度比（橫圖側通常略大，可調整） */
+       .about-lead-duo {
+           --about-duo-L: 1.28;
+           --about-duo-R: 1;
+           display: none;
+           align-items: flex-start;
+           border-radius: var(--gallery-card-radius, 8px);
+           overflow: hidden;
+           box-shadow: 0 16px 52px rgba(26, 26, 26, 0.1);
+           background: var(--bg-light);
+           line-height: 0;
+       }
+
+       .about-lead-duo-slice {
+           flex: var(--about-duo-L);
+           min-width: 0;
+           overflow: hidden;
+           background: var(--bg-light);
+       }
+
+       .about-lead-duo-slice--right {
+           flex: var(--about-duo-R);
+       }
+
+       /* 將完整寬度的圖各放大到 (L+R)/欄占比，再以 translate 露出對應半幅 */
+       .about-lead-duo-slice--left img {
+           width: calc(100% * (var(--about-duo-L) + var(--about-duo-R)) / var(--about-duo-L));
+           height: auto;
+           max-width: none;
+           display: block;
+       }
+
+       .about-lead-duo-slice--right img {
+           width: calc(100% * (var(--about-duo-L) + var(--about-duo-R)) / var(--about-duo-R));
+           height: auto;
+           max-width: none;
+           display: block;
+           transform: translateX(calc(-100% * var(--about-duo-L) / (var(--about-duo-L) + var(--about-duo-R))));
+       }
+
+       @media (min-width: 561px) {
+           .about-lead-photo--mobile-full {
+               display: none;
+           }
+
+           .about-lead-duo {
+               display: flex;
+           }
        }
 
        .about-photo-caption {

@@ -1,0 +1,140 @@
+# ZHENCHENGVISION — Developer Rules
+
+> 使用者交代的產品／技術共識。改圖庫前先讀；勿把舊實作當成使用者當初的規格。
+
+---
+
+## 完成修改後：git commit 格式
+
+每完成一輪可提交的修改，在回覆末尾附以下指令（使用者自行執行，代理不要擅自 commit 除非明確要求）：
+
+```bash
+git add .
+git commit -m "<type> <一句修改重點>"
+```
+
+- `<type>` 三選一，以**本次變更主軸**擇一：`feat` | `fix` | `style`
+- `type` 與說明之間**空一格**；說明用繁中、講「做了什麼」
+- **說明不得超過 15 字**（含標點；以使用者可見字元計）
+- 範例：`feat 文化八張固定版型`、`fix 解決about衝突`
+
+---
+
+## 圖庫核心觀念（最重要）
+
+1. **不要鎖死「第幾列長怎樣」**  
+   依**該區照片總張數**，從可組合的版型庫挑能拼滿的組合；使用者會再補新版型。
+
+2. **同一頁版型不重複**  
+   - 每個 segment 的 **`id` 同頁最多一次**  
+   - **`composeSilhouette` 同頁也不得重複**（避免視覺上像兩塊 2×2 橫橫複製）  
+   - **`four-two-two`（2×2 等分）不參與萬象多段 composer**（單獨 4 張時仍可走 `length === 4` 分支）
+
+3. **舊 CSS／JS 比例是早期代理寫的，不是使用者規格**  
+   與馬賽克對不齊就改規則，不要辯解「原本就這樣」。
+
+---
+
+## 檔案與清單（抓圖從哪來）
+
+| 用途 | 路徑 |
+|------|------|
+| 羽翼／萬象載入清單 | `gallery-manifest.json` |
+| 實體圖片 | `images/gallery-birds/`、`images/gallery-culture/` 等 |
+| 版型邏輯 | `gallery-mosaic.js` |
+| 版型樣式 | `bird-gallery.css` |
+| 羽翼頁 | `bird-gallery.html` |
+| 萬象頁 | `wanxiang-gallery.html` |
+
+- **不會自動掃資料夾**。新圖放進 `images/…` 後，**必須**把檔名寫進 `gallery-manifest.json` 對應陣列。  
+- `bird-gallery.html` 內 `FALLBACK_MANIFEST` 應與 manifest **大致同步**（fetch 失敗時用）。  
+- `bird-manifest.json` 若仍存在，視為備援清單，與 `gallery-birds` 保持一致。
+
+### 羽翼檔名解析（`parseBirdFile`）
+
+- 規則：`^(鳥種前綴)[_\-\s]?(\d{1,4})$` + 副檔名  
+- 範例：`翠鳥001.jpg`、`環頸雉002.jpg`  
+- **沒有 `$$$` 分隔符**；勿再假設 `鳥名$$$` 格式。  
+- 解析結果：`species`（鳥種鈕／篩選）、`photoTitle`（如 `Photo 001`）
+
+### 失效圖
+
+已刪除的 `LINE_ALBUM_網頁圖片_260504_*.jpg` **不得**留在 manifest；首頁 hero 等引用也要改為現有檔（如 `翠鳥001.jpg`）。
+
+---
+
+## 版型元件對照（v / h）
+
+| 符號 | 意義 | 常見 template / class |
+|------|------|------------------------|
+| `v` | 直幅 | `slot-photo-portrait`、直欄格 |
+| `h` | 橫幅 | 橫格、`aspect-ratio: 3/2` |
+
+### 混排區塊（小張數或 composer 一段）
+
+- **`1h1v`**：`galleryLayoutTplMix1h1v` — 列高固定；左直固定寬、右橫彈性；`gap`。  
+- **`2h1v`**：`galleryLayoutTplMix2h1v` — 左上下兩橫、右一直，等高。  
+- **馬賽克第二區**（`mosaic-grid--row2-only`）：areas 為左 `d/e` 兩橫、右 `c` 直跨兩列（與萬象草稿一致）。  
+- **馬賽克第三列**：`g`（左大）/ `f`（右小）— 曾做過 f/g 對調，以 CSS `grid-template-areas` 為準。  
+- **第四列**（`fourth-row`）：與主馬賽克同 `repeat(6, 1fr)`；三格時**直｜橫(佔中間 4 欄)｜直**，勿再用與上排對不齊的 `4fr 9fr 4fr`。`syncFourthRowSizing` **勿鎖死列高**。
+
+### 圖片填格規則（cover）
+
+- 混排區塊（`1h1v`、`2h1v`）與文化區所有格子一律用 **`cover` + 絕對定位填格**。  
+- 直式格有全域 `contain` 預設，混排時必須用 `cover !important` 覆蓋。  
+- 勿在混排／文化區期望 `contain` 能滿版裁切。
+
+### 滿版馬賽克（羽翼預設、萬象 `mosaicMin` 以上且未走特殊路徑）
+
+- 門檻：羽翼 `MOSAIC_UNIQUE_MIN`（10）；萬象 `renderGallery(..., { mosaicMin: 7 })`。  
+- 7 格主區 + 0〜3 格第四列；`chooseLayoutPhotos` 在 7 格時 **index 2（slot-3）優先直式**，其餘偏橫。
+
+---
+
+## 萬象足跡（`wanxiang-gallery.html`）
+
+```js
+GalleryMosaic.renderGallery(mount, folder, records, undefined, {
+  mosaicMin: 7,
+  composeUniqueLayouts: true,
+  composeMinCount: 5,
+  composeMaxCount: 48,
+});
+```
+
+- `mount` 可設 `data-four-layout="one-plus-three"`，影響 composer 內 **four-one-three** 段挑圖。  
+- **Composer**：`SEGMENT_CATALOG` + `solveUniqueSegmentPlan`（DFS，`folderName` 旋轉嘗試順序）。拆不開才 fallback 單區馬賽克。  
+- 各分館應走滿版邏輯（門檻以上），不要只有昆蟲正常。
+
+### 文化影像固定計畫（硬編碼例外）
+
+- **條件**：`folderName === "gallery-culture"` 且 `unique.length === 8`  
+- **順序**：`2v` → `(2v+1h)` → `(1v+2v)`  
+- **Templates**：`galleryCultureTpl2v`、`galleryCultureTpl2v1h`、`galleryCultureTpl1v2v`  
+- **函式**：`renderCultureEightCanonical`（優先於 composer／馬賽克）  
+- **挑圖**：直格 `pullPreferPortraitFromPool`、橫格 `pullPreferLandscapeFromPool`；全段 `layout-culture-eight` + 格內 `cover`
+
+### 使用者曾舉的 8 張拆法（供擴充參考）
+
+- `2v + (2v+1h) + (1v+2v)` → 已實作於文化館  
+- `(2v+1v) + 2v + (2v+1h)` → 需新 segment／template 後加入 catalog
+
+擴充新版型：**加 template + CSS + `SEGMENT_CATALOG` 一筆（含 `composeSilhouette`）+ `consumeSegmentFromPool` / `fillComposedSegment`**。
+
+---
+
+## 羽翼（`bird-gallery.html`）
+
+- 物種鈕來自 `species`；可過濾 `LINE_ALBUM` 前綴（歷史殘留）。  
+- `SPECIES_TO_GROUP` 對應生活型類群（如翠鳥 → 攀禽類）。  
+- 新增鳥種：manifest + 必要時 `SPECIES_TO_GROUP`／物種列表。
+
+---
+
+## 實作時避免
+
+- 只改 `layout-mix--2h1v` 卻以為萬象 8+ 張會變（張數 ≥ mosaicMin 時是馬賽克或 composer／文化特例）。  
+- 在 composer 使用 `four-two-two` 造成整頁像重複 2×2。  
+- 直式格用全域 `contain` 卻期望滿版裁切（混排／文化區要用 cover，見上方「圖片填格規則」）。  
+- 改完不更新 `gallery-manifest.json`。  
+- 把使用者沒訂的舊比例當成「使用者當初要的」。

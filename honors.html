@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>榮耀印記｜視野成珍 ZHEN CHENG VISION</title>
+    <meta name="description" content="視野成珍創作者珍幸福與 Koman 歷年攝影獲獎紀錄。">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="honors.css">
+</head>
+
+<body class="honors-body">
+    <script src="nav-loader.js"></script>
+    <nav>
+        <div class="logo"><a href="index.html"><img src="images/ZHENCHENGVISION.svg" alt="視野成珍 Logo"></a></div>
+        <ul class="nav-list">
+            <li><a href="bird-gallery.html#bird-gallery">羽翼視界</a></li>
+            <li class="nav-dropdown">
+                <a href="wanxiang-gallery.html">萬象足跡</a>
+                <ul class="nav-dropdown-menu" aria-label="萬象足跡分類">
+                    <li><a href="wanxiang-gallery.html#culture">文化影像</a></li>
+                    <li><a href="wanxiang-gallery.html#insects">昆蟲生態</a></li>
+                    <li><a href="wanxiang-gallery.html#landscapes">地景風光</a></li>
+                    <li><a href="wanxiang-gallery.html#flora">植物生態</a></li>
+                </ul>
+            </li>
+            <li><a href="honors.html" aria-current="page">榮耀印記</a></li>
+            <li><a href="about.html">關於成珍</a></li>
+        </ul>
+    </nav>
+
+    <main class="honors-page" id="honors">
+        <header class="honors-header">
+            <div class="honors-heading-accent">
+                <span class="honors-heading-line" aria-hidden="true"></span>
+                <h1 class="brand-title">榮耀印記</h1>
+                <span class="honors-heading-line" aria-hidden="true"></span>
+            </div>
+            <p class="tagline">每一份榮譽，都是光影淬鍊後留下的證明。</p>
+        </header>
+
+        <div id="honorsMount">
+            <p class="text-muted" style="text-align:center;color:var(--text-muted);">獲獎紀錄載入中…</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">ZHEN CHENG VISION</div>
+            <p class="slogan">捕捉真實瞬間，定格永恆價值。</p>
+            <hr class="footer-divider">
+            <div class="footer-bottom">
+                <a href="https://jekkinoopy.github.io/Portfolio/" class="studio-link" target="_blank">Design by
+                    <strong>Jekkinoopy Studio</strong></a>
+                <div class="copyright">&copy; 2026 視野成珍. 版權所有。</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function escapeHtml(s) {
+            return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        function renderAuthor(author) {
+            const awards = [...author.awards].sort((a, b) => (b.year || 0) - (a.year || 0));
+            const items = awards.map((a) => `
+                <li class="honor-entry">
+                    <span class="honor-year">${escapeHtml(a.year)}</span>
+                    <div class="honor-detail">
+                        <p class="honor-competition">${escapeHtml(a.competition)}</p>
+                        ${a.work ? `<p class="honor-work">作品：《${escapeHtml(a.work)}》</p>` : ""}
+                    </div>
+                    <span class="honor-tier">${escapeHtml(a.tier)}</span>
+                </li>
+            `).join("");
+
+            return `
+                <section class="honors-author">
+                    <div class="honors-author-head">
+                        <h2 class="honors-author-name">${escapeHtml(author.name)}</h2>
+                        <span class="honors-author-count">共 ${awards.length} 筆獲獎紀錄</span>
+                    </div>
+                    <ul class="honors-list">${items}</ul>
+                </section>
+            `;
+        }
+
+        async function bootstrap() {
+            const mount = document.getElementById("honorsMount");
+            try {
+                const res = await fetch("./awards-manifest.json", { cache: "no-store" });
+                if (!res.ok) throw new Error("manifest");
+                const data = await res.json();
+                mount.innerHTML = data.authors.map(renderAuthor).join("");
+            } catch (e) {
+                mount.innerHTML = '<p style="text-align:center;color:var(--text-muted);">獲獎紀錄暫時無法載入。</p>';
+            }
+        }
+
+        bootstrap();
+    </script>
+</body>
+
+</html>
